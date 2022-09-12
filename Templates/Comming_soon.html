@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+<!-- page title-->
+{% block title %}
+  Comming Soon!
+{% endblock %}
+{% block content %}
+<div class="coming_soon">
+    <img class="Cat_img" src="https://drive.google.com/uc?export=veiw&id=1qH2_pV4A7ks7OslCW6tXMo8128IW7Jl7" alt="">
+    <br>
+    <h1>WE ARE WORKING ON IT...</h1>
+</div>
+
+{%endblock%}
+{% block style %}
+<style>
+    .coming_soon{
+        width: 100%;
+        height: 80vh;
+        text-align: center;
+        background-color: aquamarine;
+        border: 5px solid crimson;
+    }
+    .coming_soon> h1{
+        padding-top: 5vh;
+    }
+    .Cat_img{
+        padding-top: 1vh;
+        width: 30vw;
+        height: 50vh;
+        margin-left:  0vw;
+    }
+    @media all and (max-width: 400px) {
+        .Cat_img{
+            width: 97vw;
+            height: 50vh;
+            margin-left: 0vw;
+        }
+    }
+</style>
+{%endblock%}
