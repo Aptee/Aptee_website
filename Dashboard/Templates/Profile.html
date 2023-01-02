@@ -1,0 +1,88 @@
+{% extends 'dashboard.html' %}
+
+{% block data%}
+<div class="details">
+    <h1>User Profile Details</h1>
+    <hr>
+
+    <div class="index">
+        <div class="index_name"><h2>Name: </h2></div>
+        <div class="index_content"><h2>{{Data[2]}}</h2></div>
+    </div>
+
+    <div class="index">
+        <div class="index_name"><h3>Email Id.:</h3></div>
+        <div class="index_content"><h3>{{Data[1]}}</h3></div>
+    </div>
+
+    <div class="index">
+        <div class="index_name"><h3>Date of Birth:</h3> </div>
+        <div class="index_content"><h3>{{Data[4]}}</h3></div>
+    </div>
+
+
+    <div class="index">
+        <div class="index_name"><h3>Gender:</h3> </div>
+        <div class="index_content"><h3>{{Data[6]}}</h3></div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">Exam Target: </div>
+        <div class="index_content">{{Data[5]}}</div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">College Name: </div>
+        <div class="index_content">{{Data[7]}}</div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">College Location: </div>
+        <div class="index_content">{{Data[8]}}</div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">Course: </div>
+        <div class="index_content">{{Data[9]}}</div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">Semester: </div>
+        <div class="index_content">{{Data[10]}}</div>
+    </div>
+
+    <div class="index">
+        <div class="index_name">Coins: </div>
+        <div class="index_content">{{Data[13]}}</div>
+    </div>
+
+
+</div>
+{%endblock%}
+
+{% block scripts%}
+<style>
+    .details{
+        margin-left: 21vw;
+        width: 74vw;
+        height: 71vh;
+        background-color: aqua;
+    }
+   
+    h1{
+        padding: 10px;
+    }
+    .index{
+        width:30vw;
+        display: flex;
+    }
+    .index_name{
+        width: 100vw;
+        padding-left: 10px;
+    }
+    .index_content{
+        width: 100vw;
+    }
+    
+</style>
+{%endblock%}

@@ -1,0 +1,321 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: #007bff;
+}
+
+::selection{
+    color: #fff;
+    background: #007bff;
+}
+
+/* sidebar */
+.container-fluid{
+    height: 753px;
+}
+/* sidebar question no etc */
+.sidebar{
+    height: 753px;
+    background-color: black;
+    
+}
+.sidebar img{
+width: 150px;
+height: 150px;
+border-radius: 50%;
+display: block;
+margin-left: auto;
+margin-right: auto;
+padding: 10px;
+}
+.sidebar h1{
+text-align: center;
+color: aliceblue;
+}
+.sidebar h5{
+    text-align: center;
+    color: white;
+}
+/* time countdown */
+.time{
+    height: 50px;
+    width:300px;
+    font-size: 20px;
+    background-color: rgb(93, 94, 88);
+    color: white;
+    text-align: center;
+    margin-left: 200px;
+    padding: 9px;
+}
+
+/* instruction */
+.dot1, .dot2, .dot3 {
+    height: 45px;
+    width: 45px;
+    margin-left: 55px;
+    margin-top: 10px;
+    padding: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    font-size: 20px;
+    color: white;  
+    }
+.dot1{
+    background-color: crimson;
+}
+.dot2{
+    background-color: green;
+}
+.dot3{
+    background-color: rgb(212, 133, 15);
+}
+#novisit, #visit, #skip{
+    padding-top: 30px;
+}
+#novisit{
+    margin-left: -25px;
+}
+#visit{
+    margin-left: -15px;
+}
+#skip{
+    margin-left: -3px;
+}
+
+.circle{
+text-align: center;
+padding: 5px;
+}
+.dot {
+height: 50px;
+width: 50px;
+margin-left: 5px;
+margin-top: 10px;
+padding: 13px;
+background-color: crimson;
+border-radius: 50%;
+display: inline-block;
+text-align: center;
+font-size: 20px;
+color: white;
+opacity: 0.2;
+
+}
+.submit{
+    width: 270px;
+    font-size: 25px;
+    margin-top: 10px;
+    opacity: 0;
+}
+/* submit button active */
+.submit_button{
+    opacity: 1;
+}
+
+/* question upload */
+.start_btn,
+.info_box,
+.quiz_box,
+.result_box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.info_box.activeInfo,
+.quiz_box.activeQuiz,
+.result_box.activeResult{
+    opacity: 1;
+    z-index: 5;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+.start_btn{
+    background-color: white;
+    width: 1000px;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 1;
+    transition: all 0.3s ease;
+    padding: 20px;
+    font-size: 25px;
+    margin-top: 400px;
+    
+}
+.info-title h1{
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: crimson;
+    padding-bottom: 20px;
+}
+.info-title h3{
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    color: crimson;
+    padding-bottom: 20px;
+}
+
+.start_btn button{
+    font-size: 25px;
+    font-weight: 500;
+    color:white;
+    padding: 10px 30px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background: crimson;
+    float: right;
+    cursor: pointer;
+    margin-top: 20px;
+}
+#exit{
+    float: right;
+    margin-top: 20px;
+}
+
+#start:hover{
+    background-color:#007bff;
+    font-weight: bolder;
+}
+.form{
+   padding: 20px;
+    /* font-size: 10px; */
+}
+
+input[type="radio"] {
+    -ms-transform: scale(1.5); 
+    -webkit-transform: scale(1.5); 
+    transform: scale(1.5);
+    
+}
+
+.info_box{
+    width: 940px;
+    height: 650px;
+    margin-left: 10px;
+    margin-top: 370px;
+    padding: 50px;
+    background: #fff;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+.box{
+    width: 740px;
+    background-color: rgb(220, 25, 25);
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.start_btn .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 2px solid crimson;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-radius: 5px 5px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.info_box .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 2px solid crimson;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-radius: 5px 5px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+.info_box .info-list{
+    padding: 15px 30px;
+}
+
+.info_box .info-list .info{
+    margin: 5px 0;
+    font-size: 17px;
+}
+
+.infoquestion{
+    font-size: 20px;
+}
+
+.buttons{
+    margin-top: 100px;
+}
+.next{
+    margin-left: 600px;
+}
+
+/* question status */
+.q_status{
+    background-color: green;
+    opacity: 1;
+}
+/* question skip */
+.q_skip{
+    background-color: rgb(212, 133, 15);
+    opacity: 1;
+}
+
+
+/* user dashboard & sidebar */
+
+  
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 100%;
+    
+  }
+
+  /* mediaquery */
+  
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+  
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+
+    @media screen and (max-width: 400px) {
+        .start_btn{
+         width: 340px;
+         font-size: 15px;
+        }
+    }
+    @media screen and (max-width: 400px) {
+        .info_box{
+         width: 340px;
+         font-size: 15px;
+        }
+    }
+}

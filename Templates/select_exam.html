@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+<!-- page title-->
+{% block links %}
+
+{% endblock %}
+{% block title %}
+  Mock Tests
+{% endblock %}
+{% block content %}
+    <!-- heading -->
+    <div class="container">
+        <h1 class="Page_title">Select Your Exam For Test</h1>
+
+        <br> 
+        <div class="list_item">
+
+            <!-- image & exam name -->
+          <div class="item_details" >
+
+            <div class="aligned">
+                <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="">
+                     
+                <span class="exam_details">
+                    <h2>Daily Practice Questions </h2><br>
+                    <h3 id="test_time">Test Time: 2 min &nbsp;| &nbsp;Difficulty level: Easy </h3>
+                </span>
+            </div>
+          </div>
+
+          <!-- select exam button -->
+
+          <div class="item_button">
+            <a href="{{ url_for('test.daily')}}"><button class="tst_button" id="select">Select </button></a>
+          </div> 
+        </div>
+        <div class="list_item">
+
+            <!-- image & exam name -->
+          <div class="item_details" >
+
+            <div class="aligned">
+                <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="">
+                     
+                <span class="exam_details">
+                    <h2 class="list_title">Graduate Aptitude Test & Engineering (GATE) </h2><br>
+                    <h3 id="test_time">Test Time: 30 min &nbsp;| &nbsp;Difficulty level: Medium</h3>
+                </span>
+            </div>
+          </div>
+
+          <!-- select exam button -->
+
+          <div class="item_button">
+            <a href="{{ url_for('test.customTest',testId='TI000001')}}"><button class="tst_button" id="select">Select </button></a>
+          </div> 
+        </div>
+
+        
+          
+      </div>
+
+      {% endblock %}
+      {% block style %}
+      
+      <style>
+
+        /* heading */
+
+        .Page_title {
+            text-align: center;
+            font-size: 50px;
+            font-weight: bold;
+            color: crimson;
+        }
+
+        /* image and exam name */
+         .aligned {
+            display: flex;
+            align-items: center;
+        }
+        .list_img{
+            height: 250px;
+            width: 250px;
+            border-radius: 50%;
+            border: 5px solid crimson;
+        }
+          
+        .exam_details {
+            padding: 1vw;
+        }
+        .list_item{
+            display: flex;
+            flex-direction: row;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+        }
+        .item_button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .item_details{
+            width: 70vw;
+        }
+        .list_title {
+            display: inline;
+            padding: 20px;
+            font-weight: bold;
+        }
+        #test_time{
+            display: inline;
+            padding: 20px;
+        }
+
+        /* select exam button */
+        #select{
+            width: 150px;
+            height: 50px;
+            font-size: 25px;
+            font-weight: 500;
+            color:white;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            background: crimson;
+            cursor: pointer;
+        }
+        #select:hover{
+            background-color:#007bff;
+            font-weight: bolder;
+        }
+        
+       
+    </style>
+{% endblock %}

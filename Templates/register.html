@@ -6,7 +6,8 @@
 {% block links %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-  <link href="https://drive.google.com/uc?export=veiw&id=10EU1lfsqoAxw8JSJjq5t6oFhCM3Fwy3P" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static',filename='register.css') }}">
+
 {% endblock %}
 {% block content %}
 
@@ -23,104 +24,93 @@
                       <div class="form-box">
                         <h1>Registration Form</h1>
                         <p>Enter your details here!</p>
-                        <form action="https://api.formbucket.com/f/c2K3QTQ" method="post">
 
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label id="name" class="form-label" for="form3Example1c">Your Name</label>
-      
-                            <div id="name" class="form-outline flex-fill mb-0">
-                              {{ form.name }}
+                        <div class="container">
+                        <form action="https://api.formbucket.com/f/c2K3QTQ" method="post">
+                          
+                          <div class="item">
+                            <div class="label">
+                              <label id="name" class="form-label" for="form3Example1c">Name</label>
                             </div>
+                            {{ form.name }}
                           </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example3c">Your Email</label>
-                            <div class="form-outline flex-fill mb-0">
-                              {{ form.email_id }}
-                              
+                          <div class="item">
+                            <div class="label">
+                              <label class="form-label" for="form3Example3c">Email</label>
                             </div>
+                              {{ form.email_id}}
                           </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4c">Password</label>
-                            <div class="form-outline flex-fill mb-0">
+                          <div class="item">
+                            <div class="label">
+                              <label class="form-label" for="form3Example3c">Password</label>
+                            </div>
                               {{ form.password}}
-                             
-                            </div>
                           </div>
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">Date of Birth</label>
-                            <div class="form-outline flex-fill mb-0">
-                              {{ form.DOB}}
-                            </div>
-                          </div>
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">Target</label>
-                            <div class="form-outline flex-fill mb-0">
-                              {{ form.target}}
-                            </div>
-                          </div>
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">Gender</label>
-      
-                            <div id="gender" class="form-outline flex-fill mb-0">
-                              
-                              {{form.gender}}
-                            </div>
-                          </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">College Name</label>
-      
-                            <div class="form-outline flex-fill mb-0">
-                              {{form.college}}
-                            </div>
-                          </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">College Location</label>
-      
-                            <div class="form-outline flex-fill mb-0">
-                              {{form.college_location}}
-                            </div>
-                          </div>
-                          
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">Course</label>
-      
-                            <div class="form-outline flex-fill mb-0">
-                              {{form.course}}
-                            </div>
-                          </div>
-                          
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <label class="form-label" for="form3Example4cd">Semester</label>
-      
-                            <div class="form-outline flex-fill mb-0">
-                              {{form.semester}}
-                            </div>
-                          </div>
-                          <div class="form-check d-flex justify-content-center mb-5">
+                            <div class="item">
+                              <div class="label">
+                                <label class="form-label" for="form3Example4cd">Date of Birth</label>
+                                </div>
+                                  {{form.DOB}}
+                              </div>
+                              <div class="item">
+                                <div class="label">
+                                  <label class="form-label" for="form3Example4cd">Target</label>
+                                  </div>
+                                    {{form.target}}
+                                </div>
+                                <div class="item">
+                                  <div class="label">
+                                    <label class="form-label" for="form3Example4cd">Gender</label>
+                                    </div>
+                                      {{form.gender}}
+                                  </div>
+                                  <div class="item">
+                                    <div class="label">
+                                      <label class="form-label" for="form3Example4cd">College Name</label>
+                                      </div>
+                                        {{form.college}}
+                                    </div>
+                                    <div class="item">
+                                      <div class="label">
+                                        <label class="form-label" for="form3Example4cd">College Location</label>
+                                        </div>
+                                          {{form.college_location}}
+                                      </div>
+                                      <div class="item">
+                                        <div class="label">
+                                          <label class="form-label" for="form3Example4cd">Course</label>
+                                          </div>
+                                            {{form.course}}
+                                        </div>
+                                        <div class="item">
+                                          <div class="label">
+                                            <label class="form-label" for="form3Example4cd">Semester</label>
+                                            </div id="Register_semester">
+                                              {{form.semester}}
+                                          </div>
+
+                        </form>
+                        </div>
+                        <div>
+
+                          <div class="form-check d-flex justify-content-center mb-5 terms">
                             <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
                             <label class="form-check-label" for="form2Example3">
                               I agree all statements in <a href="#!">Terms of service</a>
                             </label>
                           </div>
-                          <!-- <button type="submit" class="btn btn-primary btn-lg" id="btn_s">Register</button> -->
                           
-                          <input class="btn btn-primary" type="submit" value="Submit" />
+                          <input class="btn" type="submit" value="Submit" />
                           </div>
                         </form>
                       </div>
                     <!--  -->
                   </form>
-
-                  </div>
-
-                 
                 </div>
-                 
-
+                
+                </div>
+                  </div>
+                </div>
             
   </div>
 </section>

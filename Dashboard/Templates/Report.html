@@ -1,0 +1,66 @@
+{% extends 'dashboard.html' %}
+
+{% block data%}
+<div class="details">
+
+    <h2>Select The Test You Want To See Reports</h2>
+    <hr>
+
+    <div class="search-container">
+        <form action="">
+          <input type="text" placeholder="Search.." name="search">
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+   <div class="report_content">
+    <img id="test_img" src="" alt="not found">
+    <h3 id="test_id">Test Id.: {{Data[1][1]}}</h3>
+    <h3 id="test_date">Test Date.: {{Data[1][2]}}</h3>
+   </div>
+    <!-- {{Data}}
+    {{Data[1]}} -->
+</div>
+{%endblock%}
+
+{% block scripts%}
+<style>
+    .details{
+        margin-left: 21vw;
+        width: 74vw;
+        background-color: aqua;
+    }
+    .search-container {
+  float: right;
+}
+    .search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-right: 16px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background: #ccc;
+}
+.report_content{
+    width: 100vw;
+    padding: 50px;
+    display: flex;
+}
+#test_img{
+    width: 20vw;
+}
+#test_id{
+    width: 80vw;
+    margin-left: 50px;
+}
+#test_date{
+    width: 100vw;
+}
+</style>
+{%endblock%}

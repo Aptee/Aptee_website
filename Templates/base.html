@@ -65,10 +65,10 @@
               <!--Remove login button when user logs in when -->
               {%if id%}
                 <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn" id="login"><i class="fa-solid fa-user"></i>Dashboard</a>
+                  <a class="nav-link" href="{{ url_for('profile.usr_profile')}}" class="menu-btn" id="login"><i class="fa-solid fa-user"></i>Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('home')}}" class="menu-btn" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                    <a class="nav-link" href="{{ url_for('logout')}}" class="menu-btn" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
                   </li>
                   
               {%else%}
@@ -82,6 +82,10 @@
               {%endif%}
               
             </ul>
+          </div>
+          <div id="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <span class="msg"><i class="fa-solid fa-bell"></i><h3 class="notification">{{message}}</h3> </span>
           </div>
       </nav>  
       <!-- Modal -->
@@ -109,6 +113,7 @@
               </div>
           </div>
       </div>
+      <!--Notification Bar-->
       {% block content %}
 
       {% endblock %}
@@ -171,36 +176,97 @@
         loop: true
     });
 });
-// var test='{{alert_colour}}';
-
-// if(test>=0){
-//   console.log('working')
-//   createNotification(test)
-// }
-// function createNotification(flag) {
-//   var el = document.getElementById('Notif');
-//   el.style.display="block";
-//   if (flag==1){
-//     el.style.backgroundColor = "Tomato";
-//     el.style.color="white";
-//   }
-//   else{
-//     el.style.backgroundColor = "MediumSeaGreen";
-//     el.style.color="white";
-//   }
-  
-// }
 var test='{{alert_colour}}';
 var msg='{{message}}'
 if(msg){
-  alert_function(msg);
+  alert_function(msg,test);
+  //document.getElementById("alert").style.display = "block";
+  setTimeout(function(){
+    document.getElementById("alert").style.display = "none";
+           },5000);
 }
-function alert_function(msg) {
-  alert(msg);
+function alert_function(msg,test) {
+  //alert(msg);
+  document.getElementById("alert").style.display = "block";
+  console.log(test)
+  if(test==1){
+    document.getElementById("alert").style.backgroundColor = "green";
+  }else{
+    document.getElementById("alert").style.backgroundColor = "red";
+  }
 }
-
+//$('.close-btn').click(function(){
+  //document.getElementById("alert").style.display = "none";
+    //     });
 </script>
 <style>
+/* notification */
+#alert{
+  display: none;
+  width: auto;
+  /* width: max-content; */
+  border-radius: 2px;
+  padding-top: 10px;
+  float: right;
+  position: absolute;
+  margin-top: 5vh;
+  margin-left: 30vw;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: white;
+  /* font-weight: bold; */
+}
+.msg{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-between;
+  
+}
+.notification{
+  color: white;
+  font-size: 3vh;
+  padding-left: 1vh;
+  
+}
+.closebtn {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  margin-top: -5px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+}
+.start{
+  text-align: center;
+}
+
+/* modal login cross size */
+.modal-content .close {
+    color: #fff;
+    background-color: crimson;
+    font-size: 25px;
+    font-weight: 400;
+    text-shadow: none;
+    line-height: 27px;
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 1;
+    position: absolute;
+    left: auto;
+    right: 8px;
+    top: 8px;
+    z-index: 1;
+    transition: all 0.3s;
+}
 
 </style>
 </html>
