@@ -101,18 +101,12 @@ def customTest(testId):
     if 'id' not in flask.session:
         flask.session['last_page']=1
         return flask.render_template('select_exam.html',form=form,message="Please Login to Continue!",alert_colour=0)
-    else:postgres_find_query="""
-        SELECT d.client_name from clients.details as d
-        WHERE d.clientid like '{0}'
-        LIMIT 1;""".format(flask.session['id'])
-    res,err=postgres.postgres_connect(postgres_find_query,commit=0)
-    if len(err)==0:
-        client=[list(e) for e in res]
-        print(client[0][0])
+    else:
         sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
         wks=sh.worksheet("Test")
         test_row=int(testId[2:])+1
         row =wks.row_values(test_row)
+        print(row)
         if len(row)==0:
             return flask.render_template('select_exam.html',form=form,message="That Test Isn't Available Please Try Again!",alert_colour=1)
         else:
@@ -121,8 +115,7 @@ def customTest(testId):
             Questions.clear()
             Status.clear()
             [Questions.append(ele) for ele in row]
-            print(Questions)
-
+            #print(Questions)
             return flask.render_template('Exam_dashboard.html',show_ques=0)
 @test.route('/exam_submit/',methods=['POST'])
 def exam_submit():
@@ -134,7 +127,8 @@ def exam_submit():
                 try:
                     return flask.redirect(flask.url_for("test.exam_dashboard",qno=Questions[1]))
                 except:
-                    return flask.redirect(flask.url_for("test.Test"))
+                    print("exit in first q")
+                    return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again"))
             else:
                 try:
                     this_Q=flask.request.form.get('Question')
