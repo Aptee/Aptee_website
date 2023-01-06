@@ -115,7 +115,8 @@ def customTest(testId):
             Questions.clear()
             Status.clear()
             [Questions.append(ele) for ele in row]
-            #print(Questions)
+            print(row,Questions)
+            print(Time)
             return flask.render_template('Exam_dashboard.html',show_ques=0)
 @test.route('/exam_submit/',methods=['POST'])
 def exam_submit():
