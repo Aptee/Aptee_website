@@ -193,6 +193,7 @@ def exam_dashboard(qno):
             wks=sh.worksheet("Question_Details")
             test_row=int(qno[2:])+1
             row =wks.row_values(test_row)
+            print("in Dahboard",Questions)
             pos=Questions.index(qno)
             timer=int(row[15])-(int(Time[pos-1])/1000)
             if timer<60:
