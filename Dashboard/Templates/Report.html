@@ -1,4 +1,4 @@
-{% extends 'Dashboard.html' %}
+{% extends 'dashboard.html' %}
 
 {% block data%}
 <div class="details">
@@ -12,12 +12,16 @@
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
     </div>
-
-   <div class="report_content">
+    {%if Data%}
+    {%for i in range(0,Data|length)%}
+   <a href="{{ url_for('profile.usr_report_tid',uid=Data[i][0],date=Data[i][1])}}">
+    <div class="report_content">
     <img id="test_img" src="" alt="not found">
-    <h3 id="test_id">Test Id.: {{Data[1][1]}}</h3>
-    <h3 id="test_date">Test Date.: {{Data[1][2]}}</h3>
-   </div>
+    <h3 id="test_id">Test Id.: {{Data[i][0]}}</h3>
+    <h3 id="test_date">Test Date.: {{Data[i][1]}}</h3>
+   </div></a>
+   {%endfor%}
+   {%endif%}
     <!-- {{Data}}
     {{Data[1]}} -->
 </div>
@@ -28,7 +32,7 @@
     .details{
         margin-left: 21vw;
         width: 74vw;
-        background-color: aqua;
+        background-color: whitesmoke;
     }
     .search-container {
   float: right;

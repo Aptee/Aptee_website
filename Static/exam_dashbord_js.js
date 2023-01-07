@@ -16,7 +16,7 @@ var display = document.querySelector('#time');
         if (--timer < 0) {
             timer = duration;
             //next_q('1')
-            document.getElementById("Skip_Q").click();  
+            document.getElementById("submit_btn").click();  
 
         }
     }, 1000);

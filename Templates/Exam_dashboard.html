@@ -11,8 +11,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/06c86bacc2.js" crossorigin="anonymous"></script>
-
-
 </head>
 <body>
 
@@ -30,17 +28,20 @@
             <span class="dot2"><h6 id="visit">Attempt</h6></span>
             <span class="dot3"><h6 id="skip">Skip</h6></span>
             <div id="myDIV" class="circle">
-              {%for i in range(0, Questions|length)%}
-              {%if status|length >= i%}
-                {%if status[i]==0%}
-                <a href="{{ url_for('test.exam_dashboard',qno=Questions[i])}}"><span id="q_skip" class="dot">{{i+1}}</span></a>
+              
+              {%if status%}
+              {%for i in range(1,16)%}
+              {%if status|length>= i%}
+                {%if status[i]=='0'%}
+                <span id="q_skip" class="dot">{{i}}</span>
                 {%else%}
-                  <span id="q_status" class="dot">{{i+1}}</span>
+                  <span id="q_status" class="dot">{{i}}</span>
                 {%endif%}
               {%else%}
-                <span class="dot">{{i+1}}</span>
+                <span class="dot">{{i}}</span>
               {%endif%}
               {%endfor%}
+              {%endif%}
             </div>
             <div class="col text-center">
                 <button id="submit_ans" class="btn btn-danger submit">Submit</button>
@@ -71,6 +72,7 @@
           {%endif%}
           <h3>Please Click the START QUIZ button to open the quiz questions.</h3>
           <input id = "feild_txt" type="text" name="First_Q" value="1" hidden>
+          <input id = "feild_stack" type="text" name="Questions" value="{{Questions}}" hidden>
           <button type="submit">Start Quiz</button>
       </form>
     </div>
@@ -85,7 +87,7 @@
         {%if Row%}
         <div class="info-list">
             <div class="infoquestion"> 	
-               Question {{status|length+1}}: <br><br>{{Row[7]}}</div>
+               Question {{status|length}}: <br><br>{{Row[7]}}</div>
             
                 <form action="{{ url_for('test.exam_submit')}}" method="post" class="form" >
                    <input type="radio" id="op1" name="mcq" value="A">
@@ -98,7 +100,9 @@
                    <label for="op4">&nbsp;&nbsp;{{Row[11]}}</label>
                    <input id = "feild_time" type="text" name="Time" value="" hidden>
                    <input id = "feild_stack" type="text" name="Question" value="{{Ques}}" hidden>
-                   <input id = "Client_name" type="text" name="Question" value="{{Client_name}}" hidden>
+                   <input id = "feild_stack" type="text" name="Questions" value="{{Questions}}" hidden>
+                   <input id = "feild_stack" type="text" name="Status" value="{{Status}}" hidden>
+                   
                     <br>  
                     <div class="buttons">
                       <button id="submit_btn" type="submit" class="btn btn-success next" onclick="next_q()">Next Question</button>
