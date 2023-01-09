@@ -21,18 +21,19 @@
                 <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="">
                      
                 <span class="exam_details">
-                    <h2>Daily Practice Questions </h2><br>
+                    <h2>Random Practice Questions </h2><br>
                     <h3 id="test_time">Test Time: 2 min &nbsp;| &nbsp;Difficulty level: Easy </h3>
                 </span>
             </div>
           </div>
 
           <!-- select exam button -->
-
           <div class="item_button">
             <a href="{{ url_for('test.daily')}}"><button class="tst_button" id="select">Select </button></a>
           </div> 
         </div>
+        {%if Tests%}
+        {%for i in Tests%}
         <div class="list_item">
 
             <!-- image & exam name -->
@@ -42,7 +43,7 @@
                 <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="">
                      
                 <span class="exam_details">
-                    <h2 class="list_title">Graduate Aptitude Test & Engineering (GATE) </h2><br>
+                    <h2 class="list_title">{{i}}</h2><br>
                     <h3 id="test_time">Test Time: 30 min &nbsp;| &nbsp;Difficulty level: Medium</h3>
                 </span>
             </div>
@@ -51,9 +52,11 @@
           <!-- select exam button -->
 
           <div class="item_button">
-            <a href="{{ url_for('test.customTest',testId='TI000001')}}"><button class="tst_button" id="select">Select </button></a>
+            <a href="{{ url_for('test.customTest',testId=i)}}"><button class="tst_button" id="select">Select </button></a>
           </div> 
         </div>
+        {%endfor%}
+        {%endif%}
 
         
           

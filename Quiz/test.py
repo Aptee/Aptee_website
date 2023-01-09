@@ -10,12 +10,25 @@ gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 @test.route('/',methods=['GET','POST'])
 def Test(msg="",alert=0):
         #add login verification
-    
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
+        Tests=['TI000001','TI000002','TI000003','TI000004','TI000005']
+        Query="""SELECT at.clientid,at.test_id,at.attempt_time::TIMESTAMP::DATE from clients.attempts at 
+                    WHERE at.clientid = '{0}' and 
+                    at.attempt_time::TIMESTAMP::DATE > CURRENT_TIMESTAMP::Date - INTERVAL '7 DAYS'
+                    and at.test_id like 'TI%'
+                    GROUP by at.test_id,at.attempt_time::TIMESTAMP::DATE,at.clientid
+                    ORDER by at.attempt_time::TIMESTAMP::DATE DESC
+                """.format(flask.session['id'])
+        res,err=postgres.postgres_connect(Query,commit=0)
+        if len(err)==0:
+            Cooldown_test=[list(e) for e in res]
+            Cooldown_test=[e[1] for e in Cooldown_test]
+            #print(Cooldown_test)
+            Tests=[a for a in Tests if a not in Cooldown_test]
         if len(msg):
-            return flask.render_template('select_exam.html',form=form,id=flask.session['id'],message=msg,alert_colour=alert)    
-        return flask.render_template('select_exam.html',form=form,id=flask.session['id'])
+            return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Tests,message=msg,alert_colour=alert)    
+        return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Tests)
     else:
         flask.session['last_page']=1
         return flask.render_template('select_exam.html',form=form)
@@ -27,7 +40,7 @@ def daily(qid=0):
     sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
     wks=sh.worksheet("Question_Details")
     if qid==0:
-        test_row=random.randint(2,30)
+        test_row=random.randint(2,127)
         test_id='RANDOM'
     else:
         test_id='RECOMMEND'

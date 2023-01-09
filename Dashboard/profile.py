@@ -6,8 +6,9 @@ import postgres
 import random
 profile= flask.Blueprint('profile', __name__,template_folder='Templates',static_folder='Static')
 gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
+@profile.route('/notif/<msg>&<alert>',methods=['GET','POST'])
 @profile.route('/',methods=['GET','POST'])
-def usr_profile():
+def usr_profile(msg="",alert=0):
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
         postgres_find_query="""with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c
@@ -22,7 +23,15 @@ LIMIT 1;
         if len(err)==0:
             client=[list(e) for e in res]
             client=client[0]
-        return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'])
+        #print(client)
+        if len(client[-2]):
+            verify=1
+        else:
+            verify=0
+        if len(msg)==0:
+            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify)
+        else:
+            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,message=msg,alert_colour=alert)
     else:
         return flask.redirect(flask.url_for("home"))
 @profile.route('/Report',methods=['GET','POST'])
@@ -59,7 +68,7 @@ def usr_report_tid(uid,date):
                                                 pie=','.join(pie_chart(Attempts,2)),pie2=','.join(pie_chart(Attempts,4)))
         #use forms to get test id and date
         #query attempts to find test and date
-        print("Yo")
+        
     else:
         return flask.redirect(flask.url_for("home"))
 @profile.route('/analysis',methods=['GET','POST'])
@@ -71,7 +80,7 @@ def usr_analysis():
                 SELECT a.clientid,a.questionid,a.correct,a.submitted,concat('Level ',a.question_level) as question_level,a.question_length,a.question_subtopic,a.attempt_time::TIMESTAMP::DATE,a.time_taken,d.client_name,co.coin from clients.attempts a LEFT JOIN clients.details d 
                 on a.clientid=d.clientid
                 LEFT JOIN coins co on co.clientid=a.clientid
-                WHERE a.clientid like '{0}'""".format(flask.session['id'])
+                WHERE a.clientid like '{0}' and a.attempt_time::TIMESTAMP::DATE > to_date('{1}','DD-MM-YYYY')""".format(flask.session['id'],'01-01-2023')
         res,err=postgres.postgres_connect(query,commit=0)
         if len(err)==0:
             client=[list(e) for e in res]

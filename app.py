@@ -105,7 +105,7 @@ def account():
                         OTP=random.randint(10000,99999)
                         id="CL"+datetime.now().strftime("%d%m%Y%H%M%S")
                         send_email(string.capwords(form.name.data)+' here is the otp for your Aptee account','registration_email.html',form.email_id.data.lower(),
-                                param=[string.capwords(form.name.data),OTP,('127.0.0.1/account_creation/'+str(id))])
+                                param=[string.capwords(form.name.data),OTP,('aptee.onrender.com/account_verification/'+str(id)+'||'+str(OTP))])
                         postgres_insert_query="""INSERT INTO clients.details (clientid,email_id,client_name,cl_password,dob,target_exam,gender,college,college_location,client_course,semester,email_verified)
                                         VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}')
                                         """.format(id,form.email_id.data.lower(),string.capwords(form.name.data),form.password.data,
@@ -141,6 +141,38 @@ def contact_us():
 def comming_soon():
         form = SignupForm(flask.request.form)
         return flask.render_template('Comming_soon.html',form=form)
+@app.route('/account_verification',methods=['GET','POST'])
+@app.route('/account_verification/<id>',methods=['GET','POST'])
+def account_verification(id=""):
+        if flask.request.form:
+                if flask.request.form.get('OTP'):
+                        otp=flask.request.form.get('OTP')
+                        clid=flask.request.form.get('id')
+
+        elif len(id)!=0:
+                clid=id.split('||')[0]
+                otp=id.split('||')[1]
+        else:
+                return flask.redirect(flask.url_for("home"))
+        Query="""SELECT cl.clientid,cl.client_name,cl.email_id,cl.email_verified from clients.details cl
+                WHERE cl.clientid = '{0}'""".format(clid)
+        res,err=postgres.postgres_connect(Query,commit=0)
+        if len(err)==0:
+                client=[list(e) for e in res]
+                client=client[0]
+                if client[-1]!=otp:
+                        return flask.redirect(flask.url_for("profile.usr_profile",msg="You Have Entered the Wrong OTP!",alert=1))
+                else:
+                        Query="""
+                                UPDATE clients.details det
+                                SET email_verified = ''
+                                WHERE det.clientid = '{0}'""".format(client[0])
+                        err=postgres.postgres_connect(Query,commit=1)
+                        if err:
+                                return flask.redirect(flask.url_for("profile.usr_profile",msg="OTP Verified Successfully",alert=1))
+                        else:
+                                return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Try Again",alert=0))
+
 
 @app.route('/logout',methods=['GET','POST'])
 def logout():
@@ -149,4 +181,4 @@ def logout():
         return flask.redirect(flask.url_for("home"))
 
 if __name__ == '__main__':
-    app.run(debug = False)
+    app.run(debug = True)

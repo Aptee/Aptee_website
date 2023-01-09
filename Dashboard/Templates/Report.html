@@ -1,4 +1,4 @@
-{% extends 'Dashboard.html' %}
+{% extends 'dashboard.html' %}
 
 {% block data%}
 <div class="details">
@@ -16,7 +16,7 @@
     {%for i in range(0,Data|length)%}
    <a href="{{ url_for('profile.usr_report_tid',uid=Data[i][0],date=Data[i][1])}}">
     <div class="report_content">
-    <img id="test_img" src="" alt="not found">
+    <img id="test_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="not found">
     <h3 id="test_id">Test Id.: {{Data[i][0]}}</h3>
     <h3 id="test_date">Test Date.: {{Data[i][1]}}</h3>
    </div></a>

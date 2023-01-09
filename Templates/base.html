@@ -54,14 +54,15 @@
                 <a class="nav-link active" href="{{ url_for('home')}}" class="menu-btn" aria-current="page"><i class="fa-solid fa-house-user"></i>&nbsp;  Home &nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#about" class="menu-btn"><i class="fa-solid fa-address-card"></i>&nbsp;   About &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('test.Test')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-graduation-cap"></i>&nbsp; For Students &nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn"><i class="fa-solid fa-book-open-reader"></i>&nbsp;   Events&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-chalkboard-user"></i>&nbsp;For Teachers&nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#contact" class="menu-btn"><i class="fa-regular fa-envelope"></i>&nbsp;Contact&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-calendar-days"></i>&nbsp;   Events&nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
+              
               <!--Remove login button when user logs in when -->
               {%if id%}
                 <li class="nav-item">
