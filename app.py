@@ -169,11 +169,26 @@ def account_verification(id=""):
                                 WHERE det.clientid = '{0}'""".format(client[0])
                         err=postgres.postgres_connect(Query,commit=1)
                         if err:
+                                if 'id' not  in flask.session:
+                                        flask.session['id']=clid
+                                
                                 return flask.redirect(flask.url_for("profile.usr_profile",msg="OTP Verified Successfully",alert=1))
                         else:
                                 return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Try Again",alert=0))
+@app.route('/Resend_otp/',methods=['GET','POST'])
+def resend_otp():
+        if 'id' in flask.session:
 
-
+                Query="""SELECT cl.clientid,cl.client_name,cl.email_id,cl.email_verified from clients.details cl
+                        WHERE cl.clientid = '{0}'""".format(id)
+                res,err=postgres.postgres_connect(Query,commit=0)
+                if len(err)==0:
+                        client=[list(e) for e in res]
+                        client=client[0]
+                send_email(string.capwords(client[1])+' here is the otp for your Aptee account','registration_email.html',client[2],
+                                param=[string.capwords(client[1]),client[-1],('aptee.onrender.com/account_verification/'+str(client[0])+'||'+str(client[-1]))])
+        else:
+             return flask.redirect(flask.url_for("home"))   
 @app.route('/logout',methods=['GET','POST'])
 def logout():
         flask.session.pop('id',None)

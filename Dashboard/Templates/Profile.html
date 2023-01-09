@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'Dashboard.html' %}
 
 {% block data%}
 <div class="details">
@@ -13,7 +13,9 @@
             <button id="submit_btn" type="submit" class="btn btn-success next">Submit</button>
         </div>
     </form>
-
+    <div class="buttons">
+        <button id="submit_btn" type="submit" class="btn btn-success next">Resend OTP</button>
+    </div>
     {%endif%}
     <div class="index">
         <div class="index_name"><h2>Name: </h2></div>
