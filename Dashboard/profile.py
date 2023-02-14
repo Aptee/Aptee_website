@@ -4,7 +4,7 @@ import keygenerator
 from Form_model import SignupForm
 import postgres
 import random
-profile= flask.Blueprint('profile', __name__,template_folder='Templates',static_folder='Static')
+profile= flask.Blueprint('profile', __name__,template_folder='Templates',static_folder='../Static')
 gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 @profile.route('/notif/<msg>&<alert>',methods=['GET','POST'])
 @profile.route('/',methods=['GET','POST'])
@@ -12,13 +12,12 @@ def usr_profile(msg="",alert=0):
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
         postgres_find_query="""with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c
-WHERE c.clientid like '{0}'               
-GROUP by c.clientid)
-SELECT d.clientid,d.email_id,d.client_name,d.cl_password,d.dob::TIMESTAMP::DATE,d.target_exam,d.gender,d.college,d.college_location,d.client_course,d.semester,d.avatar,d.email_verified,co.coin from clients.details as d
-LEFT JOIN coins co on d.clientid = co.clientid
-WHERE d.clientid like '{0}'
-LIMIT 1;
-""".format(flask.session['id'])
+                                WHERE c.clientid like '{0}'               
+                                GROUP by c.clientid)
+                                SELECT d.clientid,d.email_id,d.client_name,d.cl_password,d.dob::TIMESTAMP::DATE,d.target_exam,d.gender,d.college,d.college_location,d.client_course,d.semester,d.avatar,d.email_verified,co.coin from clients.details as d
+                                LEFT JOIN coins co on d.clientid = co.clientid
+                                WHERE d.clientid like '{0}'
+                                LIMIT 1;""".format(flask.session['id'])
         res,err=postgres.postgres_connect(postgres_find_query,commit=0)
         if len(err)==0:
             client=[list(e) for e in res]
@@ -28,10 +27,24 @@ LIMIT 1;
             verify=1
         else:
             verify=0
+        postgres_find_query="""
+        SELECT att.questionid,att.question_subtopic,att.question_level,att.time_taken,att.correct from clients.attempts att
+        where att.clientid like '{0}' and att.correct::BOOLEAN = FALSE
+        ORDER by att.attempt_time DESC,att.question_level ASC
+        LIMIT 4
+        """.format(flask.session['id'])
+        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
+        sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
+        wks=sh.worksheet("Blogs")
+        row =wks.row_values(2)
+
+        if len(err)==0:
+            questions=[list(e) for e in res]
+            print(questions)
         if len(msg)==0:
-            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify)
+            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,Ques=questions,row=row)
         else:
-            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,message=msg,alert_colour=alert)
+            return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,Ques=questions,row=row,message=msg,alert_colour=alert)
     else:
         return flask.redirect(flask.url_for("home"))
 @profile.route('/Report',methods=['GET','POST'])
@@ -91,7 +104,7 @@ def usr_analysis():
         #print(Attempts)
         return flask.render_template('Analysis.html',form=form,id=flask.session['id'],
         bar_chart=','.join(Bar_chart(Attempts)),
-        Time1=','.join(calendar_chart(Attempts)),pie=','.join(pie_chart(Attempts,2)),pie2=','.join(pie_chart(Attempts,4)))
+        Time1=','.join(calendar_chart(Attempts)),pie=','.join(pie_chart(Attempts,2)),pie2=','.join(pie_chart(Attempts,4)),Total=len(Attempts))
     else:
         return flask.redirect(flask.url_for("home"))
 @profile.route('/Coin_history/',methods=['GET','POST'])

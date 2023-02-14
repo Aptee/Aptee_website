@@ -12,6 +12,8 @@ from Form_model import SignupForm
 from Quiz.test import test
 from Admin.admin import admin
 from Dashboard.profile import profile
+from Blogs.blogs import blog
+
 #configuring flask app
 app = flask.Flask(__name__, template_folder="Templates",static_folder='Static')
 
@@ -28,6 +30,7 @@ mail = Mail(app)
 app.register_blueprint(admin,url_prefix='/admin_panel/')
 app.register_blueprint(test,url_prefix='/test/')
 app.register_blueprint(profile,url_prefix='/Dashboard/')
+app.register_blueprint(blog,url_prefix='/Blogs/')
 
 
 

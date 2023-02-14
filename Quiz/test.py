@@ -12,6 +12,7 @@ def Test(msg="",alert=0):
         #add login verification
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
+        #print(keygenerator.get_Test_names(['TI000001','TI000002','TI000003','TI000004','TI000005']))
         Tests=['TI000001','TI000002','TI000003','TI000004','TI000005']
         Query="""SELECT at.clientid,at.test_id,at.attempt_time::TIMESTAMP::DATE from clients.attempts at 
                     WHERE at.clientid = '{0}' and 
@@ -26,22 +27,24 @@ def Test(msg="",alert=0):
             Cooldown_test=[e[1] for e in Cooldown_test]
             #print(Cooldown_test)
             Tests=[a for a in Tests if a not in Cooldown_test]
+            Test_names=keygenerator.get_Test_names(Tests)
         if len(msg):
-            return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Tests,message=msg,alert_colour=alert)    
-        return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Tests)
+            return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names,message=msg,alert_colour=alert)    
+        return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names)
     else:
         flask.session['last_page']=1
         return flask.render_template('select_exam.html',form=form)
 
-@test.route('/Random_Test/',methods=['GET','POST'])
-@test.route('/Daily_Test/<qid>',methods=['GET','POST'])
-def daily(qid=0):
+@test.route('/Random_Test/Mobile=<Mobile>',methods=['GET','POST'])
+@test.route('/Daily_Test/Id=<qid>&Mobile=<Mobile>',methods=['GET','POST'])
+def daily(qid=0,Mobile=0):
     form = SignupForm(flask.request.form)
     sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
     wks=sh.worksheet("Question_Details")
     if qid==0:
         test_row=random.randint(2,127)
         test_id='RANDOM'
+        qid='QA00000'+str(test_row)
     else:
         test_id='RECOMMEND'
         test_row=int(qid[2:])+1
@@ -90,7 +93,14 @@ def daily(qid=0):
                     return flask.redirect(flask.url_for("test.Test",msg="We Couldn't Save your Data",alert=0))
 
             else:
-                return flask.render_template('daily_questions.html',Client=client[0],Question=row,form=form)
+                if len(row)!=0:
+                    if Mobile=='1':
+                        return flask.render_template('mobileExam.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
+                    else:
+                        return flask.render_template('daily_questions.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
+                        #return flask.render_template('daily_questions.html',Client=client[0],Question=row,form=form)
+                else:
+                    return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))        
         else: 
             return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))
     else:
@@ -102,8 +112,14 @@ def daily(qid=0):
             flask.session['attempt']=str(int(row[0][2:]))+','+str(correct)+','+str(int(flask.request.form.get('Time_sheet'))/1000)
             return flask.render_template('select_exam.html',form=form,message="Sign up or login to Claim your coins!",alert_colour=1)
         else:
-            return flask.render_template('daily_questions.html',Question=row,form=form)
-
+            if len(row[7])!=0:
+                if Mobile=='1':
+                    return flask.render_template('mobileExam.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
+                else:
+                    return flask.render_template('daily_questions.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
+            else:
+                return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))
+            
 @test.route('/custom_test/testID=<testId>',methods=['GET','POST'])
 def customTest(testId):
     if 'id' not in flask.session:

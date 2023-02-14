@@ -22,14 +22,15 @@
                      
                 <span class="exam_details">
                     <h2>Random Practice Questions </h2><br>
-                    <h3 id="test_time">Test Time: 2 min &nbsp;| &nbsp;Difficulty level: Easy </h3>
+                    <h3 id="test_time">Test Time: Mixed &nbsp;| &nbsp;Difficulty level: Mixed </h3>
                 </span>
             </div>
           </div>
 
           <!-- select exam button -->
           <div class="item_button">
-            <a href="{{ url_for('test.daily')}}"><button class="tst_button" id="select">Select </button></a>
+            <a href="{{ url_for('test.daily',Mobile=0)}}"><button class="tst_button" id="select">Select Exam</button></a>
+            <a href="{{ url_for('test.daily',Mobile=1)}}"><button class="tst_button_mobile" id="select">Select Exam</button></a>
           </div> 
         </div>
         {%if Tests%}
@@ -43,8 +44,8 @@
                 <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="">
                      
                 <span class="exam_details">
-                    <h2 class="list_title">{{i}}</h2><br>
-                    <h3 id="test_time">Test Time: 30 min &nbsp;| &nbsp;Difficulty level: Medium</h3>
+                    <h2 class="list_title">{{i[1]}}</h2><br>
+                    <h3 id="test_time">Test Topics: Mixed &nbsp;| &nbsp;Difficulty level: Mixed</h3>
                 </span>
             </div>
           </div>
@@ -52,7 +53,7 @@
           <!-- select exam button -->
 
           <div class="item_button">
-            <a href="{{ url_for('test.customTest',testId=i)}}"><button class="tst_button" id="select">Select </button></a>
+            <a href="{{ url_for('test.customTest',testId=i[0])}}"><button class="tst_button" id="select">Select </button></a>
           </div> 
         </div>
         {%endfor%}
@@ -131,6 +132,27 @@
         #select:hover{
             background-color:#007bff;
             font-weight: bolder;
+        }
+        .tst_button_mobile{
+            display: none;
+        }
+        @media all and (max-width: 400px) {
+        .tst_button{
+            display: none;
+        }
+        .tst_button_mobile{
+            display: block;
+        }
+        }
+        @media screen and (max-width: 400px){
+            .Page_title {
+            text-align: center;
+            font-size: 27px;
+            font-weight: bold;
+            color: crimson;
+            margin-top: 10px;
+            padding: 2px;
+        }
         }
         
        

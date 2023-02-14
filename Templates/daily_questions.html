@@ -56,15 +56,15 @@
             <div class="infoquestion"> 	
                Questin No: <br><br> {{Question[7]}}</div>
             
-                <form action="{{ url_for('test.daily')}}" method="post" class="form" >
+                <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile)}}" method="post" class="form" >
                    <input type="radio" id="op1" name="mcq" value="A">
-                    <label for="1">&nbsp&nbsp{{Question[8]}}</label><br>
+                    <label for="op1">&nbsp&nbsp{{Question[8]}}</label><br>
                    <input type="radio" id="op2" name="mcq" value="B">
-                   <label for="2">&nbsp&nbsp{{Question[9]}}</label><br>
+                   <label for="op2">&nbsp&nbsp{{Question[9]}}</label><br>
                    <input type="radio" id="op3" name="mcq" value="C">
-                   <label for="3">&nbsp&nbsp{{Question[10]}}</label><br>
+                   <label for="op3">&nbsp&nbsp{{Question[10]}}</label><br>
                    <input type="radio" id="op4" name="mcq" value="D">
-                   <label for="3">&nbsp&nbsp{{Question[11]}}</label>
+                   <label for="op4">&nbsp&nbsp{{Question[11]}}</label>
                   
                     <br>  
                   <input id = "feild_txt" type="text" name = "Time_sheet" value="" hidden>

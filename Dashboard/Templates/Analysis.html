@@ -1,6 +1,19 @@
-{% extends 'Dashboard.html' %}
+{% extends 'base.html' %}
 
-{% block data%}
+{% block content%}
+<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
+
+<div class="main">
+    <div class="dashboard_navbar">
+        <ul>
+            <li><a href="">Profile</a></li>
+            <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
+            <li><a class="active" href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
+            <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
+            <li><a href="">Shop</a></li>
+        </ul>
+    </div>
+{{Total}}
 <div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 21vw;"></div>
 <div style="display: flex;width:74vw;padding-top: 5vh;margin-left: 25vw;">
   <div id="donutchart" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin: auto;"></div>
@@ -8,8 +21,7 @@
 </div>
 <div id="calendar_basic" style="width: 60vw; margin:auto;margin-left: 27vw;"></div>
 {%endblock%}
-
-{% block scripts%}
+{% block style %}
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
       var Cal='{{Time1}}';
@@ -111,4 +123,4 @@
       chart.draw(data, google.charts.Bar.convertOptions(options));
     }
   </script>
-{%endblock%}
+{% endblock %}

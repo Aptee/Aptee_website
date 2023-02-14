@@ -1,4 +1,5 @@
 from cryptography.fernet import Fernet
+import urllib.request
 def generatekey():
     f = open("etc/secrets/det.txt", "r")
     a=f.read()
@@ -22,3 +23,13 @@ def get_email_pass():
     cipher_suite = Fernet(bytes(generatekey(),'UTF-8'))
     return str(cipher_suite.decrypt(bytes('gAAAAABivcvM07hd5UvYq-h_Qi3_AXivMrKkhaWqvzzvlQ0PFffl4pk7tF7JpYCvADHYZITI53DDANHAvdheAdCwLR1Lmd2pPYonRE4QrPrCAh_6xUanbGo=','UTF-8')),'UTF-8')
 #print(generatekey())
+def get_Test_names(Tid=[]):
+    line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/Test_name.csv').read()
+    rec=[e.split(',') for e in str(line,'utf-8').split('\n')]
+    if len(Tid)>1:
+        result = [element for element in rec if element[0] in Tid]
+    elif len(Tid)==1:
+        result = [element for element in rec if element[0] in str(Tid)]
+    else:
+        print('Error')
+    return result

@@ -1,6 +1,18 @@
-{% extends 'Dashboard.html' %}
+{% extends 'base.html' %}
 
-{% block data%}
+{% block content%}
+<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
+<div class="main">
+    <div class="dashboard_navbar">
+        <ul>
+            <li><a  href="">Profile</a></li>
+            <li><a class="active" href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
+            <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
+            <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
+            <li><a href="">Shop</a></li>
+        </ul>
+    </div>
+
 <div class="details">
 
     <h2>Select The Test You Want To See Reports</h2>
