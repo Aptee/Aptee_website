@@ -51,9 +51,9 @@ def daily(qid=0,Mobile=0):
     row =wks.row_values(test_row)
     #row=wks.row_values(random.randint(2,16))
     #print(row)
-    if 'attempt' in flask.session:
+    if 'attempt' in flask.session and 'id' not in flask.session:
         return flask.render_template('register.html',form=form,message="Please Sign up or Sign in to Continue with the Assessment")
-    if 'id' in flask.session:
+    elif 'id' in flask.session:
         postgres_find_query="""
         with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c GROUP by c.clientid)
         SELECT d.client_name,d.college,co.coin from clients.details as d
@@ -95,7 +95,7 @@ def daily(qid=0,Mobile=0):
             else:
                 if len(row)!=0:
                     if Mobile=='1':
-                        return flask.render_template('mobileExam.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
+                        return flask.render_template('mobileExam_Daily.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
                     else:
                         return flask.render_template('daily_questions.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
                         #return flask.render_template('daily_questions.html',Client=client[0],Question=row,form=form)
@@ -114,7 +114,7 @@ def daily(qid=0,Mobile=0):
         else:
             if len(row[7])!=0:
                 if Mobile=='1':
-                    return flask.render_template('mobileExam.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
+                    return flask.render_template('mobileExam_Daily.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
                 else:
                     return flask.render_template('daily_questions.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
             else:
