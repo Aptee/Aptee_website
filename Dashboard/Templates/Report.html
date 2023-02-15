@@ -2,10 +2,11 @@
 
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
-<div class="main">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<div class="main_report">
     <div class="dashboard_navbar">
         <ul>
-            <li><a  href="">Profile</a></li>
+            <li><a  href="{{ url_for('profile.usr_profile')}}">Profile</a></li>
             <li><a class="active" href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
             <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
             <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
@@ -16,18 +17,18 @@
 <div class="details">
 
     <h2>Select The Test You Want To See Reports</h2>
-    <hr>
+   <br>
 
     <div class="search-container">
         <form action="">
-          <input type="text" placeholder="Search.." name="search">
+          <input id="myInput" type="text" placeholder="Search..." name="search">
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
     </div>
     {%if Data%}
     {%for i in range(0,Data|length)%}
    <a href="{{ url_for('profile.usr_report_tid',uid=Data[i][0],date=Data[i][1])}}">
-    <div class="report_content">
+    <div id="myTable" class="report_content">
     <img id="test_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/gate.png" alt="not found">
     <h3 id="test_id">Test Id.: {{Data[i][0]}}</h3>
     <h3 id="test_date">Test Date.: {{Data[i][1]}}</h3>
@@ -37,22 +38,40 @@
     <!-- {{Data}}
     {{Data[1]}} -->
 </div>
-{%endblock%}
-
-{% block scripts%}
 <style>
+    .main_report{
+  width: 100vw;
+}
+.dashboard_navbar{
+    position: fixed;
+    width: 100%;
+}
     .details{
-        margin-left: 21vw;
-        width: 74vw;
+        /* margin-left: 21vw; */
+        width: 100vw;
         background-color: whitesmoke;
+    }
+    .details h2{
+        font-family: cursive;
+        font-size: 50px;
+        padding-top: 14vh;
+        padding-left: 20px;
+    }
+    .details h3{
+        padding-top: 50px;
     }
     .search-container {
   float: right;
 }
+.search-container input{
+    width: 400px;
+    height: 40px;
+    font-size: 25px;
+}
     .search-container button {
   float: right;
   padding: 6px 10px;
-  margin-top: 8px;
+  margin-top: 1px;
   margin-right: 16px;
   background: #ddd;
   font-size: 17px;
@@ -69,7 +88,10 @@
     display: flex;
 }
 #test_img{
-    width: 20vw;
+    width: 10vw;
+    height: 10vw;
+    border-radius: 50%;
+    border: 5px solid crimson;
 }
 #test_id{
     width: 80vw;
@@ -79,4 +101,17 @@
     width: 100vw;
 }
 </style>
+
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable h3").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
+{%endblock%}
+{% block scripts%}
 {%endblock%}

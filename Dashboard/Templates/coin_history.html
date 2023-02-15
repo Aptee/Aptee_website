@@ -2,10 +2,10 @@
 
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
-<div class="main">
+<div class="main_coin">
     <div class="dashboard_navbar">
         <ul>
-            <li><a  href="">Profile</a></li>
+            <li><a  href="{{ url_for('profile.usr_profile')}}">Profile</a></li>
             <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
             <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
             <li><a class="active" href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
@@ -13,15 +13,77 @@
         </ul>
     </div>
 <div class="details">
-    {{Data}}
-    {{Data[1]}}
+    <h1>Coins details that you have earned</h1>
+    <!-- {{Data}}
+    {{Data[1]}} -->
+    <table>
+        <tr>
+          <th>Question</th>
+          <th>Coin Gain</th>
+          <th>Date</th>
+        </tr>
+        <tr>
+          <td>{{Data[0][1]}}</td>
+          <td>{{Data[0][2]}}</td>
+          <td>{{Data[0][4]}}</td>
+        </tr>
+        <tr>
+            <td>{{Data[1][1]}}</td>
+            <td>{{Data[1][2]}}</td>
+            <td>{{Data[1][4]}}</td>
+          </tr>
+          <tr>
+            <td>{{Data[2][1]}}</td>
+            <td>{{Data[2][2]}}</td>
+            <td>{{Data[2][4]}}</td>
+          </tr>
+          <tr>
+            <td>{{Data[3][1]}}</td>
+            <td>{{Data[3][2]}}</td>
+            <td>{{Data[3][4]}}</td>
+          </tr>
+          <tr>
+            <td>{{Data[4][1]}}</td>
+            <td>{{Data[4][2]}}</td>
+            <td>{{Data[4][4]}}</td>
+          </tr>
+      </table>
 </div>
-{%endblock%}
-
-{% block scripts%}
 <style>
-    .details{
-        margin-left: 21vw;
+    .main_coin{
+        width: 100vw;
     }
+    .dashboard_navbar{
+    position: fixed;
+    width: 100%;
+}
+    .details h1{
+        padding-top: 110px;
+        padding-left: 50px;
+        font-size: 50px;
+        font-family: cursive;
+        padding-bottom: 40px;
+    }
+    table, th, td {
+        margin: auto;
+        width: 60vw;
+        border: 3px solid black;
+        border-collapse: collapse;
+        margin-bottom: 80px;
+        padding: 20px;
+        font-size: 30px;
+        text-align: center;
+}
+th {
+  text-align: center;
+  font-size: 40px;
+  color: white;
+  background-color: crimson;
+}
+tr:nth-child(even) {
+  background-color: #8ef3f3;
+}
 </style>
+{%endblock%}
+{% block scripts%}
 {%endblock%}

@@ -2,7 +2,7 @@
 
 {% block data%}
 <div class="details">
-    <hr>
+    <div class="email">
     {%if verify%}
     <form class="form" action="{{ url_for('account_verification')}}" method="post">
         <input id = "feild_otp" type="text" name="OTP" value="">
@@ -16,54 +16,70 @@
         <button id="submit_btn" type="submit" class="btn btn-success next">Resend OTP</button>
     </div>
     {%endif%}
-    <h1>&nbsp;Recent Failed Attempts</h1>
-                {{Ques}}
-                <div class="two_box">
-                    <div class="test_box">
-                        <p>Test</p>
-                        <p>Catgeory</p>
-                        <p>Level</p>
+    </div>
+    <div class="questions">
+        <h1>&nbsp;Recent Failed Attempts</h1>
+                <!-- {{Ques}} -->
+                <!-- <div class="recent">
+                    <h2> Question on {{Ques[0][1]}}</h2>
+                    <h2>Level: {{Ques[0][2]}}</h2>
+                    <button>Attempt</button>
+                </div> -->
+                <div class="flex-container">
+                    <div class="flex-item-left">
+                        <h2> Question on {{Ques[0][1]}}</h2>
+                        <h2>Level: {{Ques[0][2]}}</h2>
+                        <a href="{{ url_for('test.daily',qid=Ques[0][0],Mobile=0)}}"><button>Attempt</button></a>
                     </div>
-                    <div class="test_box">
-                        <p>Test</p>
-                        <p>Catgeory</p>
-                        <p>Level</p>
+                    <div class="flex-item-right">
+                        <h2> Question on {{Ques[1][1]}}</h2>
+                        <h2>Level: {{Ques[1][2]}}</h2>
+                        <a href="{{ url_for('test.daily',qid=Ques[1][0],Mobile=0)}}"><button>Attempt</button></a>
+                    </div>
+
+                    <div class="flex-item-left">
+                        <h2> Question on {{Ques[2][1]}}</h2>
+                        <h2>Level: {{Ques[2][2]}}</h2>
+                        <a href="{{ url_for('test.daily',qid=Ques[2][0],Mobile=0)}}"><button>Attempt</button></a>
+                    </div>
+                    <div class="flex-item-right">
+                        <h2> Question on {{Ques[3][1]}}</h2>
+                        <h2>Level: {{Ques[3][2]}}</h2>
+                        <a href="{{ url_for('test.daily',qid=Ques[3][0],Mobile=0)}}"><button>Attempt</button></a>
                     </div>
                 </div>
-                <div class="two_box">
-                    <div class="test_box">
-                        <p>Test</p>
-                        <p>Catgeory</p>
-                        <p>Level</p>
-                    </div>
-                    <div class="test_box">
-                        <p>Test</p>
-                        <p>Catgeory</p>
-                        <p>Level</p>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="blogs">
+
             <h1>&nbsp;Recommended Blogs</h1>
-            {{row}}
-            <div class="test_box">
-                <p>Test</p>
+            <!-- {{row}} -->
+            <!-- <div class="test_box">
+                <p>{{row[1]}}</p>
                 <p>Catgeory</p>
                 <p>Level</p>
-            </div>
+            </div> -->
 
+            <div class="blog_content">
+                <h2>Title: Lorem impsum Lorem Ipsum</h2>
+                <h2>Related Topic: {{Ques[0][1]}}, {{Ques[1][1]}}, {{Ques[2][1]}}</h2>
+                <h2>Target: Gate</h2>
+            </div>
+    </div>
+</div>
 {%endblock%}
 
 {% block scripts%}
 <style>
     .details{
-        margin-left: 21vw;
         width: 74vw;
-        height: 71vh;
+        height: 70vh;
         background-color: whitesmoke;
+        overflow: scroll;
     }
    
-    h1{
+    .questions h1{
         padding: 10px;
+        margin-top: 20px;
     }
     .index{
         width:30vw;
@@ -75,6 +91,78 @@
     }
     .index_content{
         width: 100vw;
+    }
+    .flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.flex-item-left {
+  background-color: rgb(198, 195, 192);
+  padding: 10px;
+  border: 1px solid black;
+  color: crimson;
+  flex: 40%;
+  margin-top: 30px;
+}
+
+.flex-item-right {
+  background-color: rgb(198, 195, 192);
+  margin-left: 100px;
+  padding: 10px;
+  border: 1px solid black;
+  color: crimson;
+  flex: 40%;
+  margin-top: 30px;
+}
+    .flex-item-right button{
+        float: right;
+        width: 150px;
+        background-color: crimson;
+        margin: 10px;
+        padding: 5px;
+        border: none;
+        color: white;
+    }
+    .flex-item-left button{
+        float: right;
+        width: 150px;
+        background-color: crimson;
+        margin: 10px;
+        padding: 5px;
+        border: none;
+        color: white;
+    }
+    .flex-item-right button:hover{
+        color: crimson;
+        background-color: white;
+        border: 2px solid crimson;
+        font-weight: bold;
+    }
+    .flex-item-left button:hover{
+        color: crimson;
+        background-color: white;
+        border: 2px solid crimson;
+        font-weight: bold;
+    }
+    .blog_content{
+        padding: 30px;
+        width: 65vw;
+        height: 25vh;
+        background-color: rgb(195, 200, 204);
+        margin: auto;
+        margin-top: 30px;
+        border: 1px solid black;
+    }
+    .blogs h1{
+        padding-top: 50px;
+        padding-left: 10px;
+    }
+    .blog_content h2{
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: crimson;
     }
     
 </style>
