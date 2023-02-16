@@ -59,7 +59,7 @@ def usr_report_menu():
         res,err=postgres.postgres_connect(query,commit=0)
         if len(err)==0:
             data=[[e[0],e[1].strftime("%d-%m-%Y"),e[2]] for e in res]
-        print(data)
+        #print(data)
         return flask.render_template('Report.html',Data=data,form=form,id=flask.session['id'])
         #query attempts to find distinct test and group by date
     else:
@@ -148,7 +148,7 @@ def pie_chart(Attempts,index=2):
     pie=[[a[0],a[1]] for a in TimeS]
     pie.insert(0,['Labels','Counts'])
     pie=[str(j) for sub in pie for j in sub]
-    print(pie)
+    #print(pie)
     return pie
 def Bar_chart(Attempts):
     dir=[['BL1','Numbers'], ['BL2','Averages and Mixtures'], ['BL3','Arithmatic and Word Based Problems'], ['BL4','Geometry'], 
