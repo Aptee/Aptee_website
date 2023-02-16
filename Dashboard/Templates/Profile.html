@@ -60,9 +60,10 @@
             </div> -->
 
             <div class="blog_content">
-                <h2>Title: Lorem impsum Lorem Ipsum</h2>
-                <h2>Related Topic: {{Ques[0][1]}}, {{Ques[1][1]}}, {{Ques[2][1]}}</h2>
-                <h2>Target: Gate</h2>
+                <h2>Title: {{row[1]}}</h2>
+                <h2>Related Topic: {{row[4]}}</h2>
+                <h2>Target: {{row[11]}}</h2>
+                <a href="{{ url_for('blog.blog_post',postid=row[0])}}"><button>Attempt</button></a>
             </div>
     </div>
 </div>
