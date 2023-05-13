@@ -34,7 +34,7 @@ def cart():
                 product_name=flask.request.form.get('product')
                 pay_with_coin=flask.request.form.get('ap_coin')
                 if pay_with_coin:
-                    url = 'http://127.0.0.1:8000/api/purchase_through_coins'
+                    url = 'https://aptee.onrender.com/api/purchase_through_coins'
                     payload={
                                 "id":flask.session['id'],
                                 "email":client[1],
@@ -70,7 +70,7 @@ def reat_questions(otp=0):
         details=[list(e) for e in res]
         if len(details)>0:
             details=details[0]
-        url = 'http://127.0.0.1:8000/send_email'
+        url = 'https://aptee.onrender.com/send_email'
         payload={
                     "id":flask.session['id'],
                     "header":details[5]+ " Here is the Question You Asked For",
