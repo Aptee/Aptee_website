@@ -1,5 +1,6 @@
 
 .Holder {
+    position: absolute;
     height: 100%;
     width: 100%;
     display: flex;
@@ -11,15 +12,12 @@
     background: crimson;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    /* margin-top: 10vh; */
 }
 .sidenav h2{
     text-align: center;
-    font-size: 50px;
+    font-size: 40px;
     color: yellow;
     height: 0;
-    padding-top: 20px;
     font-family: 'Times New Roman', Times, serif;
 }
 .sidenav h5{
@@ -27,29 +25,27 @@
     height: 0;
     color: yellow;
     font-weight: normal;
-    padding-top: 50px;
     font-family: 'Times New Roman', Times, serif;
 }
-
+hr{
+    width: 80%;
+}
 .icon{
     display: flex;
-    font-size: 35px;
+    font-size: 25px;
     font-family: 'Times New Roman', Times, serif;
     color: white;
     height: 50px;
-    padding: 20px;
-}
-.icon p{
-  padding-top: 25px;
+    padding: 10px;
 }
 .sidenav i{
-    padding: 35px;
-    font-size: 25px;
+    padding: 30px;
+    font-size: 20px;
     color: yellow;
 }
 .avatar {
-    width: 210px;
-    height: 210px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     padding: 10px;
     align-self: center;
@@ -59,32 +55,16 @@
     margin: 10px;
     margin-top: 30px;
 }
-.avatar img{
-  width: 190px;
-  height: 190px;
-  margin: auto;
-  padding: 20px;
-  margin-left: 1px;
-  
-}
 
 /* left sidebar */
 .main{
-    width: 75vw;
+    flex: 1;
     /* padding: 20px; */
     background-color: rgb(214, 209, 209);
-}
-.Main_box{
-  width: 75vw;
-  overflow-y: scroll;
 }
 
 
 /* navbar */
-/* .dashboard_navbar{
-  width: 100vw;
-  margin-left: -25vw;
-} */
 .dashboard_navbar ul {
     list-style-type: none;
     margin-left:0;
@@ -119,4 +99,14 @@
   .dashboard_navbar .active {
     background-color: #ffffff5d;
   }
-  
+  .two_box{
+    display: flex;
+    margin: 30px;
+  }
+  .test_box{
+    margin-left: 100px;
+    width: 400px;
+    height: 150px;
+    border: 2px solid crimson;
+    padding: 10px;
+  }

@@ -3,42 +3,25 @@
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
 
-<div class="main_analysis">
+<div class="main">
     <div class="dashboard_navbar">
         <ul>
-          <li><a  href="{{ url_for('profile.usr_profile')}}">Profile</a></li>
+            <li><a href="">Profile</a></li>
             <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
             <li><a class="active" href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
             <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
             <li><a href="">Shop</a></li>
         </ul>
     </div>
-
-    <div class="total_attempt">
-        <h1>Total Question Attempted: {{Total}}</h1>
-    </div>
-<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin:auto"></div>
-<div style="display: flex;width:74vw;padding-top: 5vh;margin:auto;">
+{{Total}}
+<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 21vw;"></div>
+<div style="display: flex;width:74vw;padding-top: 5vh;margin-left: 25vw;">
   <div id="donutchart" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin: auto;"></div>
   <div id="donutchart1" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin:auto;"></div>
 </div>
-<div id="calendar_basic" style="width: 60vw; margin:auto;margin:auto;"></div>
+<div id="calendar_basic" style="width: 60vw; margin:auto;margin-left: 27vw;"></div>
 {%endblock%}
 {% block style %}
-
-<style>
-  .main_analysis{
-    width: 99.5vw;
-  }
-  
-  .total_attempt{
-    font-size: 50px;
-    font-family: cursive;
-    padding: 70px;
-  }
-</style>
-
-
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
       var Cal='{{Time1}}';

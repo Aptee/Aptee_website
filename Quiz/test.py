@@ -28,6 +28,7 @@ def Test(msg="",alert=0):
             #print(Cooldown_test)
             Tests=[a for a in Tests if a not in Cooldown_test]
             Test_names=keygenerator.get_Test_names(Tests)
+            #print(Test_names)
         if len(msg):
             return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names,message=msg,alert_colour=alert)    
         return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names)
@@ -37,7 +38,8 @@ def Test(msg="",alert=0):
 
 @test.route('/Random_Test/Mobile=<Mobile>',methods=['GET','POST'])
 @test.route('/Daily_Test/Id=<qid>&Mobile=<Mobile>',methods=['GET','POST'])
-def daily(qid=0,Mobile=0):
+@test.route('/Reattempt/ID=<qid>&Mobile=<Mobile>&Token=<Token>',methods=['GET','POST'])
+def daily(qid=0,Mobile=0,Token=""):
     form = SignupForm(flask.request.form)
     sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
     wks=sh.worksheet("Question_Details")
@@ -45,12 +47,15 @@ def daily(qid=0,Mobile=0):
         test_row=random.randint(2,127)
         test_id='RANDOM'
         qid='QA00000'+str(test_row)
+    elif qid!=0 and len(Token)>1:
+        test_id='REATTEMPT'
+        test_row=int(qid[2:])+1
     else:
         test_id='RECOMMEND'
         test_row=int(qid[2:])+1
     row =wks.row_values(test_row)
     #row=wks.row_values(random.randint(2,16))
-    #print(row)
+    # print(row)
     if 'attempt' in flask.session and 'id' not in flask.session:
         return flask.render_template('register.html',form=form,message="Please Sign up or Sign in to Continue with the Assessment")
     elif 'id' in flask.session:
@@ -118,7 +123,7 @@ def daily(qid=0,Mobile=0):
                 else:
                     return flask.render_template('daily_questions.html',Question=row,timer=int(row[15])+240,form=form,qid=qid,Mobile=Mobile)
             else:
-                return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))
+                return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=1))
             
 @test.route('/custom_test/testID=<testId>',methods=['GET','POST'])
 def customTest(testId):

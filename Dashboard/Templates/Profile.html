@@ -2,7 +2,7 @@
 
 {% block data%}
 <div class="details">
-    <div class="email">
+    <hr>
     {%if verify%}
     <form class="form" action="{{ url_for('account_verification')}}" method="post">
         <input id = "feild_otp" type="text" name="OTP" value="">
@@ -13,74 +13,89 @@
         </div>
     </form>
     <div class="buttons">
-        <button id="submit_btn" type="submit" class="btn btn-success next">Resend OTP</button>
+        <a href="{{ url_for('resend_otp')}}"><button id="submit_btn" type="submit" class="btn btn-success next">Resend OTP</button></a>
     </div>
     {%endif%}
-    </div>
-    <div class="questions">
-        <h1>&nbsp;Recent Failed Attempts</h1>
-                <!-- {{Ques}} -->
-                <!-- <div class="recent">
-                    <h2> Question on {{Ques[0][1]}}</h2>
-                    <h2>Level: {{Ques[0][2]}}</h2>
-                    <button>Attempt</button>
-                </div> -->
-                <div class="flex-container">
-                    <div class="flex-item-left">
-                        <h2> Question on {{Ques[0][1]}}</h2>
-                        <h2>Level: {{Ques[0][2]}}</h2>
-                        <a href="{{ url_for('test.daily',qid=Ques[0][0],Mobile=0)}}"><button>Attempt</button></a>
+    <h1>&nbsp;Recent Failed Attempts</h1>
+             {%if Ques%}
+                <div class="two_box">
+                    <div class="test_box">
+                        <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
+                            <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
+                            <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[0][0]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                        </form>
+                        <p>Question Topic : {{Ques[0][5]}}</p>
+                        <p>Time Taken : {{Ques[0][3]|int /100}}</p>
+                        <p>Level : {{Ques[0][2]}}</p>
                     </div>
-                    <div class="flex-item-right">
-                        <h2> Question on {{Ques[1][1]}}</h2>
-                        <h2>Level: {{Ques[1][2]}}</h2>
-                        <a href="{{ url_for('test.daily',qid=Ques[1][0],Mobile=0)}}"><button>Attempt</button></a>
-                    </div>
-
-                    <div class="flex-item-left">
-                        <h2> Question on {{Ques[2][1]}}</h2>
-                        <h2>Level: {{Ques[2][2]}}</h2>
-                        <a href="{{ url_for('test.daily',qid=Ques[2][0],Mobile=0)}}"><button>Attempt</button></a>
-                    </div>
-                    <div class="flex-item-right">
-                        <h2> Question on {{Ques[3][1]}}</h2>
-                        <h2>Level: {{Ques[3][2]}}</h2>
-                        <a href="{{ url_for('test.daily',qid=Ques[3][0],Mobile=0)}}"><button>Attempt</button></a>
+                    <div class="test_box">
+                        <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
+                            <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
+                            <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[1][0]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                        </form>
+                        <p>Question Topic : {{Ques[1][5]}}</p>
+                        <p>Time Taken : {{Ques[1][3]|int /100}}</p>
+                        <p>Level : {{Ques[1][2]}}</p>
                     </div>
                 </div>
-    </div>
-    <div class="blogs">
-
-            <h1>&nbsp;Recommended Blogs</h1>
-            <!-- {{row}} -->
-            <!-- <div class="test_box">
-                <p>{{row[1]}}</p>
-                <p>Catgeory</p>
-                <p>Level</p>
-            </div> -->
-
-            <div class="blog_content">
-                <h2>Title: {{row[1]}}</h2>
-                <h2>Related Topic: {{row[4]}}</h2>
-                <h2>Target: {{row[11]}}</h2>
-                <a href="{{ url_for('blog.blog_post',postid=row[0])}}"><button>Attempt</button></a>
+                <div class="two_box">
+                    <div class="test_box">
+                        <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
+                            <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
+                            <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[2][0]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                        </form>
+                        <p>Question Topic : {{Ques[2][5]}}</p>
+                        <p>Time Taken : {{Ques[2][3]|int /100}}</p>
+                        <p>Level : {{Ques[2][2]}}</p>
+                    </div>
+                    <div class="test_box">
+                        <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
+                            <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
+                            <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[3][0]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                        </form>
+                        <p>Question Topic : {{Ques[3][5]}}</p>
+                        <p>Time Taken : {{Ques[3][3]|int /100}}</p>
+                        <p>Level : {{Ques[3][2]}}</p>
+                    </div>
+                </div>
             </div>
-    </div>
-</div>
+            {%else%}
+                No Questions Attempted
+            {%endif%}
+            <h1>&nbsp;Recommended Blogs</h1>
+            <div class="test_box">
+                {{row[1]}}
+            </div>
+
 {%endblock%}
 
 {% block scripts%}
 <style>
     .details{
+        margin-left: 21vw;
         width: 74vw;
-        height: 70vh;
+        height: 71vh;
         background-color: whitesmoke;
-        overflow: scroll;
     }
    
-    .questions h1{
+    h1{
         padding: 10px;
-        margin-top: 20px;
     }
     .index{
         width:30vw;
@@ -92,78 +107,6 @@
     }
     .index_content{
         width: 100vw;
-    }
-    .flex-container {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 30px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.flex-item-left {
-  background-color: rgb(198, 195, 192);
-  padding: 10px;
-  border: 1px solid black;
-  color: crimson;
-  flex: 40%;
-  margin-top: 30px;
-}
-
-.flex-item-right {
-  background-color: rgb(198, 195, 192);
-  margin-left: 100px;
-  padding: 10px;
-  border: 1px solid black;
-  color: crimson;
-  flex: 40%;
-  margin-top: 30px;
-}
-    .flex-item-right button{
-        float: right;
-        width: 150px;
-        background-color: crimson;
-        margin: 10px;
-        padding: 5px;
-        border: none;
-        color: white;
-    }
-    .flex-item-left button{
-        float: right;
-        width: 150px;
-        background-color: crimson;
-        margin: 10px;
-        padding: 5px;
-        border: none;
-        color: white;
-    }
-    .flex-item-right button:hover{
-        color: crimson;
-        background-color: white;
-        border: 2px solid crimson;
-        font-weight: bold;
-    }
-    .flex-item-left button:hover{
-        color: crimson;
-        background-color: white;
-        border: 2px solid crimson;
-        font-weight: bold;
-    }
-    .blog_content{
-        padding: 30px;
-        width: 65vw;
-        height: 25vh;
-        background-color: rgb(195, 200, 204);
-        margin: auto;
-        margin-top: 30px;
-        border: 1px solid black;
-    }
-    .blogs h1{
-        padding-top: 50px;
-        padding-left: 10px;
-    }
-    .blog_content h2{
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        color: crimson;
     }
     
 </style>

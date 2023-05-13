@@ -36,11 +36,21 @@ def usr_profile(msg="",alert=0):
         res,err=postgres.postgres_connect(postgres_find_query,commit=0)
         sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
         wks=sh.worksheet("Blogs")
-        row =wks.row_values(2)
-
-        if len(err)==0:
+        row =wks.row_values(random.randint(2,5))
+        row=row
+        questions=[]
+        if len(err)==0 and len(res)>0:
             questions=[list(e) for e in res]
-            print(questions)
+            topic=[x[1].split(',') for x in questions]
+            flatten_lst=lambda y:[x for a in y for x in flatten_lst(a)] if type(y) is list else [y]
+            # print()
+            topic=keygenerator.get_questions_topics(flatten_lst(topic))
+            topics=[]
+            for d in questions:
+                for i in range(len(d[1].split(','))):
+                    topics.append(topic[[x[0] for x in topic].index(d[1].split(',')[i])][1])
+                d.append(','.join(topics))
+                topics=[]
         if len(msg)==0:
             return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,Ques=questions,row=row)
         else:
@@ -59,8 +69,14 @@ def usr_report_menu():
         res,err=postgres.postgres_connect(query,commit=0)
         if len(err)==0:
             data=[[e[0],e[1].strftime("%d-%m-%Y"),e[2]] for e in res]
-        #print(data)
-        return flask.render_template('Report.html',Data=data,form=form,id=flask.session['id'])
+        
+        Test_names=keygenerator.get_Test_names([d[0] for d in data])
+        print(Test_names)
+        for d in data:
+            d.append(Test_names[[x[0] for x in Test_names].index(d[0])][1])
+            d.append(Test_names[[x[0] for x in Test_names].index(d[0])][2])
+        print(data)
+        return flask.render_template('Report.html',Data=data,test_name=Test_names,form=form,id=flask.session['id'])
         #query attempts to find distinct test and group by date
     else:
         return flask.redirect(flask.url_for("home"))
@@ -148,7 +164,7 @@ def pie_chart(Attempts,index=2):
     pie=[[a[0],a[1]] for a in TimeS]
     pie.insert(0,['Labels','Counts'])
     pie=[str(j) for sub in pie for j in sub]
-    #print(pie)
+    print(pie)
     return pie
 def Bar_chart(Attempts):
     dir=[['BL1','Numbers'], ['BL2','Averages and Mixtures'], ['BL3','Arithmatic and Word Based Problems'], ['BL4','Geometry'], 

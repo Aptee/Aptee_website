@@ -1,5 +1,7 @@
 #importing required packages
 from datetime import datetime
+import json
+import requests
 import time
 import gspread
 import flask
@@ -13,6 +15,8 @@ from Quiz.test import test
 from Admin.admin import admin
 from Dashboard.profile import profile
 from Blogs.blogs import blog
+from API.api import api
+from Ecommerce.ecm import ecm
 
 #configuring flask app
 app = flask.Flask(__name__, template_folder="Templates",static_folder='Static')
@@ -31,6 +35,8 @@ app.register_blueprint(admin,url_prefix='/admin_panel/')
 app.register_blueprint(test,url_prefix='/test/')
 app.register_blueprint(profile,url_prefix='/Dashboard/')
 app.register_blueprint(blog,url_prefix='/Blogs/')
+app.register_blueprint(api,url_prefix='/api/')
+app.register_blueprint(ecm,url_prefix='/ecommerce/')
 
 
 
@@ -53,31 +59,29 @@ def home():
                 return flask.render_template('index.html',form=form,id=id)
         else:
                 if form.email_id.data:
-                        postgres_find_query="""
-                        with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c
-                        GROUP by c.clientid)
-                        SELECT d.clientid,d.email_id,d.cl_password,d.client_name,co.coin from clients.details as d
-                        LEFT JOIN coins co on d.clientid = co.clientid
-                        Where lower(d.email_id) like '{0}'
-                        LIMIT 1;
-                        """.format(form.email_id.data.lower())
-                        #print(postgres_find_query)
-                        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
-                        details=[list(e) for e in res]
-                        if len(details)>0 and len(err)==0:
-                                if form.password.data == details[0][2]:
-                                        flask.session['id']=details[0][0]
-                                        if 'last_page' in flask.session:
-                                                print(flask.session['last_page'])
-                                                if flask.session['last_page']==1:
-                                                        flask.session.pop('last_page',None)
-                                                        return flask.redirect(flask.url_for("test.Test"))
-                                        else:
-                                                return flask.render_template('index.html',form=form,message="Logged in Successfully as : "+details[0][3],id=flask.session['id'],alert_colour=1)
+                        url = 'http://127.0.0.1:8000/api/verify_usr'
+                        payload = {
+                                    "email": form.email_id.data.lower(),
+                                    "pass":form.password.data
+                                }
+                        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+                        r = requests.post(url, data=json.dumps(payload), headers=headers)
+                        print(r.status_code)
+                        try:
+                                data =r.json()
+                        except:
+                                flask.session.pop('id',None)
+                                return flask.render_template('index.html',form=form)
+                        if r.status_code == 400:
+                                return flask.render_template('index.html',form=form,message=data['msg'],alert_colour=0)
+                        elif r.status_code == 200:
+                                flask.session['id']=data['id']
+                                if 'last_page' in flask.session:
+                                        if flask.session['last_page']==1:
+                                                flask.session.pop('last_page',None)
+                                                return flask.redirect(flask.url_for("test.Test"))
                                 else:
-                                        return flask.render_template('index.html',form=form,message="Password incorrect",alert_colour=0)
-                        else:
-                                return flask.render_template('index.html',form=form,message="Please Register First!",alert_colour=1)
+                                        return flask.render_template('index.html',form=form,message=data['msg'],id=flask.session['id'],alert_colour=1)
                 else:
                         return flask.render_template('index.html',form=form)
         
@@ -110,10 +114,9 @@ def account():
                         send_email(string.capwords(form.name.data)+' here is the otp for your Aptee account','registration_email.html',form.email_id.data.lower(),
                                 param=[string.capwords(form.name.data),OTP,('aptee.onrender.com/account_verification/'+str(id)+'||'+str(OTP))])
                         postgres_insert_query="""INSERT INTO clients.details (clientid,email_id,client_name,cl_password,dob,target_exam,gender,college,college_location,client_course,semester,email_verified)
-                                        VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}')
-                                        """.format(id,form.email_id.data.lower(),string.capwords(form.name.data),form.password.data,
-                                        str(form.DOB.data),form.target.data,form.gender.data,form.college.data,
-                                        form.college_location.data,form.course.data,form.semester.data,OTP)
+                                        VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}')
+                                        """.format(id,form.email_id.data.lower(),string.capwords(form.name.data),form.password.data,str(form.DOB.data),form.target.data,                                                        form.gender.data,
+                                                        form.college.data,form.college_location.data,form.course.data,form.semester.data,OTP)
                         a=postgres.postgres_connect(postgres_insert_query,commit=1)
                         
                         if a:  
@@ -181,17 +184,57 @@ def account_verification(id=""):
 @app.route('/Resend_otp/',methods=['GET','POST'])
 def resend_otp():
         if 'id' in flask.session:
-
                 Query="""SELECT cl.clientid,cl.client_name,cl.email_id,cl.email_verified from clients.details cl
-                        WHERE cl.clientid = '{0}'""".format(id)
+                        WHERE cl.clientid = '{0}'""".format(flask.session['id'])
                 res,err=postgres.postgres_connect(Query,commit=0)
                 if len(err)==0:
                         client=[list(e) for e in res]
                         client=client[0]
                 send_email(string.capwords(client[1])+' here is the otp for your Aptee account','registration_email.html',client[2],
                                 param=[string.capwords(client[1]),client[-1],('aptee.onrender.com/account_verification/'+str(client[0])+'||'+str(client[-1]))])
+                return flask.redirect(flask.url_for("profile.usr_profile",msg="We've Resent The OTP",alert=0))
         else:
-             return flask.redirect(flask.url_for("home"))   
+             return flask.redirect(flask.url_for("home"))
+@app.route('/send_email',methods=['POST'])
+def email_link():
+        if 'id' in flask.request.get_json():
+                data=flask.request.get_json()
+                print(data['header'])
+                msg = Message(
+                        string.capwords(data['header']),
+                        sender ='apteeproject@gmail.com',
+                        recipients = [data['emails']]
+                        )
+                msg.html=flask.render_template(data['email_template'],param=data['param'].split('||'))
+                mail.send(msg)
+                return flask.jsonify({'msg':'Email Sent'}),200
+        else:
+                return flask.jsonify({'msg':'You Do not have the access to view this'}),400
+@app.route('/api_test',methods=['GET','POST'])
+def api_test():
+        url = 'http://127.0.0.1:8000/api/purchase_through_coins'
+        # payload = {
+        #             "email": form.email_id.data.lower(),
+        #             "pass":form.password.data
+        #         }
+        if 'id' in flask.session:
+                payload={
+                        "id":flask.session['id'],
+                        "email":'1',
+                        "product_id":'1',
+                        "price":'100'
+
+                }
+        else:
+                payload={"length":'10'}
+        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+        # json.dumps(payload)
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+        try:
+                return r.json()
+        except:
+                return "BAD REQUEST"
+
 @app.route('/logout',methods=['GET','POST'])
 def logout():
         flask.session.pop('id',None)
@@ -199,4 +242,4 @@ def logout():
         return flask.redirect(flask.url_for("home"))
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug = True,port=8000)

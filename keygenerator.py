@@ -33,3 +33,13 @@ def get_Test_names(Tid=[]):
     else:
         print('Error')
     return result
+def get_questions_topics(id=[]):
+    line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/Qtags_dir.csv').read()
+    rec=[e.split(',') for e in str(line,'utf-8').split('\n')]
+    if len(id)>1:
+        result = [element for element in rec if element[0] in id]
+    elif len(id)==1:
+        result = [element for element in rec if element[0] in str(id)]
+    else:
+        print('Error')
+    return result
