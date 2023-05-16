@@ -51,7 +51,7 @@ def Generate_Random_test():
         for i in range(len(IDs)):
             row =wks.row_values(IDs[i])
             time.sleep(random.randint(0,4))
-            Questions.append([i+1,row[7],row[8],row[9],row[10],row[11]])
+            Questions.append([row[0],i+1,row[7],row[8],row[9],row[10],row[11]])
             answers.append([i+1,row[12]])
             Questionids.append([i+1,row[0]])
         postgres_insert_query = """
@@ -126,6 +126,41 @@ def purchase_through_coupons():
     else:
         return flask.jsonify({'msg':'Please Logout and Login Again'}),400
 
+@api.route('/Generate_tests/',methods=['POST'])
+def generate_test():
+    if 'id' in flask.request.get_json():
+        data=flask.request.get_json()
+        postgres_find_query="""
+            SELECT att.questionid,att.attempt_time from clients.attempts att WHERE att.clientid like '{0}' 
+            and att.correct::BOOLEAN= FALSE and att.submitted='1' 
+            order by att.question_level
+            LIMIT 25
+            """.format(data['id'])
+            #print(postgres_find_query)
+        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
+        details=[list(e) for e in res]
+        # print(details)
+        recommend=flask.jsonify(keygenerator.get_rec_questions([x[0] for x in details]))
+        if type(recommend.get_json())==list:
+            IDs=recommend.get_json()
+            print(IDs)
+            sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
+            wks=sh.worksheet("Question_Details")
+            Questions=[]
+            # print(int(IDs[0][2:]))
+            for i in range(len(IDs)):
+                row =wks.row_values(int(IDs[i][2:]))
+                time.sleep(random.randint(0,4))
+                Questions.append([row[0],i+1,row[7],row[8],row[9],row[10],row[11]])
+                postgres_insert_query = """
+                                                INSERT INTO ecommerce.generated_tests(client_id,order_id,questions,Generation_ts)
+                                                VALUES ('{0}','{1}','{2}',CURRENT_TIMESTAMP)
+                                                """.format(data['id'],'FREE','|'.join([str(x[0]) for x in Questions]))
+            # print('|'.join([str(x[1]) for x in Questionids]))
+                a=postgres.postgres_connect(postgres_insert_query,commit=1)
+            return flask.jsonify(Questions),200
+        else: 
+            return recommend,400
 
 
 

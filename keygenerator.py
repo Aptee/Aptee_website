@@ -43,3 +43,34 @@ def get_questions_topics(id=[]):
     else:
         print('Error')
     return result
+def get_rec_questions(Tid=[],rec=0):
+    if rec==0:
+        line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/AntiRecommendations.csv').read()
+    else:
+        line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/Recommendations.csv').read()
+    rec=[e.split(',') for e in str(line,'utf-8').split('\n')]
+    rec=[element for element in rec if len(element)>1]
+    if len(Tid)>9:
+        result = [element[2:] for element in rec if element[1] in Tid]
+        # print(result)
+        flatten_lst=lambda y:[x for a in y for x in flatten_lst(a)] if type(y) is list else [y]
+        result=flatten_lst(result)
+        counts = {item:result.count(item) for item in result}
+        items=sorted(counts.items(), key=lambda x:x[1],reverse=True)
+        # print(items)
+        result=[x[0] for x in items]
+        try:
+            result=result[:15]
+        except:
+            return {'msg':'We Couldnt Find 15 Different Questions you got wrong To Built a Test Out Off!'}
+    else:
+        return {"msg":"Minimum 10 Questions Required"}
+    return result
+def get_shop_products():
+    line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/Products_with_img.csv').read()
+    rec=[e.split(',') for e in str(line,'utf-8').split('\n')]
+    if len(rec)>1:
+        result = rec[1:-1]
+    else:
+        return "error"
+    return result

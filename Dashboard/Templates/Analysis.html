@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-
+{% block title %}
+Your Analysis
+{% endblock %}
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
 
@@ -10,16 +12,16 @@
             <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
             <li><a class="active" href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
             <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
-            <li><a href="">Shop</a></li>
+            <li><a href="{{ url_for('profile.usr_shop')}}">Shop</a></li>
         </ul>
     </div>
-{{Total}}
-<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 21vw;"></div>
-<div style="display: flex;width:74vw;padding-top: 5vh;margin-left: 25vw;">
+<h1 style="text-align: center;font-family: cursive;">Total Attempted Questions: {{Total}}</h1>
+<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 15vw;"></div>
+<div style="display: flex;width:74vw;padding-top: 15vh;margin-left: 15vw;">
   <div id="donutchart" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin: auto;"></div>
   <div id="donutchart1" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin:auto;"></div>
 </div>
-<div id="calendar_basic" style="width: 60vw; margin:auto;margin-left: 27vw;"></div>
+<div id="calendar_basic" style="width: 60vw; margin:auto;margin-left: 20vw;margin-top: 10vh;"></div>
 {%endblock%}
 {% block style %}
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

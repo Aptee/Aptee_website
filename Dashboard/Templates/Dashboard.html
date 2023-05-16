@@ -9,6 +9,7 @@ Aptee Dashboard
 {% block content %}
     <div class="Holder">
       <!-- sidebar -->
+      {%if Data%}
       <div class="sidenav">
           <div class="avatar">
           </div>
@@ -32,10 +33,10 @@ Aptee Dashboard
               <p>{{Data[5]}}</p>
           </div>
           <div class="icon">
-            <i class="fa-solid fa-coin"></i>
+            <i class="fa-solid fa-coins"></i>
             <p>{{Data[13]}}</p>
         </div>
-        
+      {%endif%}
           
           
       </div>
@@ -46,7 +47,7 @@ Aptee Dashboard
                 <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
                 <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
                 <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
-                <li><a href="">Shop</a></li>
+                <li><a href="{{ url_for('profile.usr_shop')}}">Shop</a></li>
             </ul>
         </div>
         <div class="Main_box">
@@ -58,4 +59,7 @@ Aptee Dashboard
 
 {%endblock%}
 {% block style %}
+{% endblock %}
+
+{% block script%}
 {% endblock %}

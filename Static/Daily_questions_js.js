@@ -18,3 +18,7 @@ function stopButton() {
         alert('Click the Start button first');
     }
 }
+
+function startButton(){
+    alert("Hello");
+}

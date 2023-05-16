@@ -28,11 +28,11 @@ def usr_profile(msg="",alert=0):
         else:
             verify=0
         postgres_find_query="""SELECT * from (SELECT * from (SELECT att.questionid,att.question_subtopic,att.question_level,att.time_taken,att.correct,att.test_id from clients.attempts att
-where att.clientid like 'CL13052023210641' and att.correct::BOOLEAN = FALSE and att.test_id like '%RANDOM%'
+where att.clientid like '{0}' and att.correct::BOOLEAN = FALSE and att.test_id like '%RANDOM%'
                LIMIT 2) a2
 UNION
 SELECT * from (SELECT te.questionid,te.question_subtopic,te.question_level,te.time_taken,te.correct,te.test_id from clients.attempts te 
-where te.clientid like 'CL13052023210641' and te.correct::BOOLEAN = FALSE and te.test_id like '%TI%'
+where te.clientid like '{0}' and te.correct::BOOLEAN = FALSE and te.test_id like '%TI%'
               LIMIT 2) a3) a1
 order by a1.test_id
         """.format(flask.session['id'])
@@ -89,16 +89,37 @@ def usr_report_tid(uid,date):
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
         if uid[:2] == 'TI':
-            query="""SELECT a.clientid,a.questionid,a.correct,a.submitted,concat('Level ',a.question_level) as question_level,a.question_length,a.question_subtopic,a.attempt_time::TIMESTAMP::DATE,a.time_taken from clients.attempts a
-                    WHERE a.clientid like '{0}' 
-                    and a.attempt_time::TIMESTAMP::DATE =to_date('{1}','DD-MM-YYYY') 
-                    and a.test_id ='{2}'""".format(flask.session['id'],date,uid)
+            query="""
+            with tab1 as (SELECT a.clientid,a.questionid,a.correct,a.submitted,concat('Level ',a.question_level) as question_level,a.question_length,a.question_subtopic,a.attempt_time::TIMESTAMP::DATE,a.time_taken from clients.attempts a
+            WHERE a.clientid like '{0}' 
+            and a.attempt_time::TIMESTAMP::DATE =to_date('{1}','DD-MM-YYYY') 
+            and a.test_id ='{2}'
+            ),
+            -- SELECT * from tab1
+            ana as (
+            SELECT b.questionid,
+            count(case when b.correct = 'True' then b.correct END) ana_correct,
+            count(case when b.correct = 'False' and b.submitted != '0' then b.correct END) ana_Wrong,
+            count(case when b.submitted = '1' then b.submitted END) ana_submitted,
+            count(case when b.submitted = '0' then b.submitted END) ana_skipped,
+            avg(case when b.correct = 'True' and b.submitted != '0' then b.time_taken::INTEGER END) avg_time_correct,
+            avg(case when b.correct = 'False' and b.submitted != '0' then b.time_taken::INTEGER END) avg_time_reject
+            from clients.attempts b
+            WHERE b.test_id ='{2}'
+            group by 1
+            )
+            SELECT * from tab1 t1 
+            left join ana t2 
+            on t1.questionid = t2.questionid
+            """.format(flask.session['id'],date,uid)
             res,err=postgres.postgres_connect(query,commit=0)
             if len(err)==0:
                 Attempts=[list(e) for e in res]
+                print(','.join(Bar_chart(Attempts)))
+                print(','.join(pie_chart(Attempts,2)))
                 return flask.render_template('Test_Report.html',form=form,id=flask.session['id'],
                                                 bar_chart=','.join(Bar_chart(Attempts)),
-                                                pie=','.join(pie_chart(Attempts,2)),pie2=','.join(pie_chart(Attempts,4)))
+                                                pie=','.join(pie_chart(Attempts,2)),pie2=','.join(pie_chart(Attempts,4)),table=Attempts)
         #use forms to get test id and date
         #query attempts to find test and date
         
@@ -129,13 +150,14 @@ def usr_analysis():
         return flask.redirect(flask.url_for("home"))
 @profile.route('/Coin_history/',methods=['GET','POST'])
 @profile.route('/Coin_history/Page=<page>',methods=['GET','POST'])
-def usr_coin_history(page=0):
+def usr_coin_history(page=-10):
     form = SignupForm(flask.request.form)
     try:
         page=int(page)
     except:
-        page=0
+        page=-10
     if 'id' in flask.session:
+        # print(flask.session['id'])
         query="""
         SELECT * from clients.coin_history co
         WHERE co.clientid = '{0}'
@@ -150,6 +172,19 @@ def usr_coin_history(page=0):
         return flask.render_template('coin_history.html',Data=data,form=form,id=flask.session['id'])
     else:
         return flask.redirect(flask.url_for("home"))
+    
+@profile.route('/Shop/',methods=['GET','POST'])
+def usr_shop():
+    form = SignupForm(flask.request.form)
+    if 'id' in flask.session:
+        data=keygenerator.get_shop_products()
+        if data!="error":
+            return flask.render_template('shop.html',data=data,form=form,id=flask.session['id'])
+        return flask.redirect(flask.url_for("comming_soon"))
+    else:
+        return flask.redirect(flask.url_for("home"))
+
+
 def calendar_chart(Attempts):
     TimeS=[a[7].strftime("%m/%d/%Y") for a in Attempts]
     countS = {item:TimeS.count(item) for item in TimeS}

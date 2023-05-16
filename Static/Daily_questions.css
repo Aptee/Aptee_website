@@ -7,7 +7,7 @@
 }
 
 body{
-    background: #007bff;
+    background: crimson;
 }
 
 ::selection{
@@ -37,14 +37,14 @@ body{
 }
 .start_btn{
     background-color: white;
-    width: 740px;
+    width: 940px;
     border-radius: 5px;
     transform: translate(-50%, -50%) scale(0.9);
     opacity: 1;
     transition: all 0.3s ease;
     padding: 20px;
     font-size: 25px;
-    
+    margin-left: 170px;
 }
 .info-title h1{
     font-size: 50px;
@@ -52,6 +52,7 @@ body{
     text-align: center;
     color: crimson;
     padding-bottom: 20px;
+    padding-left: 130px;
 }
 .info-title h3{
     font-size: 25px;
@@ -73,6 +74,11 @@ body{
     float: right;
     cursor: pointer;
     margin-top: 20px;
+}
+.start_btn button:hover{
+    background-color: white;
+    border: 3px solid crimson;
+    color: crimson;
 }
 #exit{
     font-size: 15px;
@@ -102,17 +108,16 @@ body{
     margin-top: 20px;
 }
 #next:hover{
-    background-color:#007bff;
-    font-weight: bolder;
+    background-color:white;
+    color: crimson;
+    border: 3px solid crimson;
 }
 #exit:hover{
-    background-color:#007bff;
-    font-weight: bolder;
+    background-color:white;
+    color: crimson;
+    border: 3px solid crimson;
 }
-#start:hover{
-    background-color:#007bff;
-    font-weight: bolder;
-}
+
 .form{
    padding: 20px;
     /* font-size: 10px; */
@@ -122,9 +127,9 @@ input[type="radio"] {
     -ms-transform: scale(1.5); 
     -webkit-transform: scale(1.5); 
     transform: scale(1.5);
-    margin-top: 10px;
-   
-    
+}
+#id1{
+    padding: 10px;
 }
 
 .info_box{
@@ -189,7 +194,7 @@ input[type="radio"] {
 .sidebar {
     margin: 0;
     padding: 0;
-    width: 250px;
+    width: 350px;
     background-color: #f1f1f1;
     position: fixed;
     height: 100%;
@@ -213,12 +218,12 @@ input[type="radio"] {
   }
    
   .sidebar a.active {
-    background-color: #04AA6D;
+    background-color: crimson;
     color: white;
   }
   
   .sidebar a:hover:not(.active) {
-    background-color: #555;
+    background-color: crimson;
     color: white;
   }
   

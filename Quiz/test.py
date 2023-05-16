@@ -4,6 +4,10 @@ import keygenerator
 from Form_model import SignupForm
 import postgres
 import random
+import json
+import requests
+from datetime import datetime
+
 test= flask.Blueprint('test', __name__,template_folder='../Templates',static_folder='../Static')
 gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 @test.route('/notif/<msg>&<alert>',methods=['GET','POST'])
@@ -13,7 +17,9 @@ def Test(msg="",alert=0):
     form = SignupForm(flask.request.form)
     if 'id' in flask.session:
         #print(keygenerator.get_Test_names(['TI000001','TI000002','TI000003','TI000004','TI000005']))
-        Tests=['TI000001','TI000002','TI000003','TI000004','TI000005']
+        Tests=['TI000001','TI000002','TI000003','TI000004','TI000005','TI000006','TI000007','TI000008','TI000009','TI000010']
+        random.seed(datetime.today().strftime("%d/%m/%Y"))
+        Tests = random.sample(Tests, 5)
         Query="""SELECT at.clientid,at.test_id,at.attempt_time::TIMESTAMP::DATE from clients.attempts at 
                     WHERE at.clientid = '{0}' and 
                     at.attempt_time::TIMESTAMP::DATE > CURRENT_TIMESTAMP::Date - INTERVAL '7 DAYS'
@@ -28,12 +34,15 @@ def Test(msg="",alert=0):
             #print(Cooldown_test)
             Tests=[a for a in Tests if a not in Cooldown_test]
             # print(Tests)
-            Test_names=keygenerator.get_Test_names(Tests)
-            print(len(Test_names[-1])==1)
-            if len(Test_names)==0:
-                Test_names=[]
-            elif len(Test_names[-1])==1:
-                Test_names=Test_names[:-1]
+            if len(Tests)>0:
+                Test_names=keygenerator.get_Test_names(Tests)
+                print(len(Test_names[-1])==1)
+                if len(Test_names)==0:
+                    Test_names=[]
+                elif len(Test_names[-1])==1:
+                    Test_names=Test_names[:-1]
+            else:
+                Test_names = []
         if len(msg):
             return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names,message=msg,alert_colour=alert)    
         return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names)
@@ -43,12 +52,15 @@ def Test(msg="",alert=0):
 
 @test.route('/Random_Test/Mobile=<Mobile>',methods=['GET','POST'])
 @test.route('/Daily_Test/Id=<qid>&Mobile=<Mobile>',methods=['GET','POST'])
-@test.route('/Reattempt/ID=<qid>&Mobile=<Mobile>&Token=<Token>',methods=['GET','POST'])
-def daily(qid='0',Mobile=0,Token=" ",is_random=0):
+@test.route('/Reattempt/ID=<qid>&Mobile=<Mobile>&Token=<Token>&is_random<is_random>',methods=['GET','POST'])
+def daily(qid='0',Mobile=0,Token="a",is_random=0):
     form = SignupForm(flask.request.form)
     sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
     wks=sh.worksheet("Question_Details")
     print(qid,Token)
+    if 'attempt' in flask.session and 'id' not in flask.session:
+        return flask.render_template('register.html',form=form,message="Please Sign up or Sign in to Continue with the Assessment")
+    
     if qid=='0' and len(Token)==1:
         is_random=1
         test_row=random.randint(2,127)
@@ -119,11 +131,15 @@ def daily(qid='0',Mobile=0,Token=" ",is_random=0):
             return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))
     else:
         if flask.request.form:
+            # print("Yo")   
             if flask.request.form.get('mcq')==row[12]:
+                    # print(1)
                     correct=1
             else:
+                    # print(2)
                     correct=0
             flask.session['attempt']=str(int(row[0][2:]))+','+str(correct)+','+str(int(flask.request.form.get('Time_sheet'))/1000)
+            # print(3)
             return flask.render_template('select_exam.html',form=form,message="Sign up or login to Claim your coins!",alert_colour=1)
         else:
             if len(row[7])!=0:
@@ -235,4 +251,53 @@ def exam_dashboard(qno):
 @test.route('/exit_quiz/',methods=['GET','POST'])
 def exit():
     return flask.redirect(flask.url_for("test.Test",msg="You Have Exited the Quiz",alert=0))
-    
+
+@test.route('/generate_reommended_test/',methods=['GET','POST'])
+def generate_recommended_test():
+    if 'id' in flask.session:
+        url = 'https://aptee.onrender.com/api/Generate_tests'
+        payload={
+                    "id":flask.session['id']
+            }
+        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+        # json.dumps(payload)
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+        if r.status_code == 200:
+            return flask.render_template('question_paper.html',data=r.json()) 
+            # return r.json()
+        elif r.status_code == 400:
+            return flask.render_template('question_paper.html',data="",message="We Have Encountered an error. We are Working on It.")
+            # return r.json()
+    else:
+            return flask.redirect(flask.url_for("test.Test",msg="You Need To Login To Generate Your Recommended Test",alert=0))
+@test.route('/for_teachers/',methods=['GET','POST'])
+def for_teacher():
+    form = SignupForm(flask.request.form)
+    if 'id' in flask.session:
+        return flask.render_template('For_teachers.html',form=form,id=flask.session['id'])
+    else:
+        return flask.render_template('register.html',form=form,message="Please Sign up or Sign in to Continue")
+
+
+
+@test.route('/generate_random_test/',methods=['GET','POST'])
+def generate_random_test():
+    if 'id' in flask.session:
+        url = 'https://aptee.onrender.com/api/Generate_Random_test'
+        payload={
+                    "id":flask.session['id'],
+                    "length":15,
+                    "order_id":"FREE"
+            }
+        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+        # json.dumps(payload)
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+        if r.status_code == 200:
+            data=r.json()
+            return flask.render_template('question_paper.html',data=data['Questions']) 
+            # return r.json()
+        elif r.status_code == 400:
+            return flask.render_template('question_paper.html',data="",message="We Have Encountered an error. We are Working on It.")
+            # return r.json()
+    else:
+            return flask.redirect(flask.url_for("test.Test",msg="You Need To Login To Generate Your Recommended Test",alert=0))

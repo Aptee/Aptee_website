@@ -22,7 +22,7 @@ def admin_login():
                         return flask.redirect(flask.url_for("admin.question_crud"))
         else:
                 if form.email_id.data:
-                        url = 'http://127.0.0.1:8000/api/verify_usr'
+                        url = 'https://aptee.onrender.com/api/verify_usr'
                         payload = {
                                     "email": form.email_id.data.lower(),
                                     "pass":form.password.data
@@ -51,53 +51,61 @@ def admin_login():
 @admin.route('/admin_panel/',methods=['GET','POST'])
 def question_crud():
         if 'id' in flask.session:
-                sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
-                wks=sh.worksheet("Question_Details")
-                wks2=sh.worksheet("Tags_dir")
-                Question_subtopic = [[e[4], e[5]] for e in wks2.get_all_values()]
-                if flask.request.form:
-                        Q_id='QA00000'
-                        QNo=str(len(wks.col_values(1))+1)
-                        Q_id=Q_id[:-len(QNo)]+str(QNo)
-                        Question_Domain=','.join([i[:3] for i in flask.request.form.getlist('Q_Topic')])
-                        Question_sub_Domain=','.join([i[:6] for i in flask.request.form.getlist('Q_Topic')])
-                        Question_topics=','.join(flask.request.form.getlist('Q_Topic'))
-                        wks.append_row([Q_id,flask.request.form.get('Q_img'),Question_Domain,Question_sub_Domain,Question_topics,
-                                        flask.request.form.get('Q_lev'),flask.request.form.get('Q_Len'),flask.request.form.get('Q_title'),
-                                        flask.request.form.get('Q_op_A'),flask.request.form.get('Q_op_B'),flask.request.form.get('Q_op_C'),flask.request.form.get('Q_op_D'),
-                                        flask.request.form.get('Q_Sol'),flask.request.form.get('Sol_img'),flask.request.form.get('Sol_title'),(int(flask.request.form.get('Q_Len'))+int(flask.request.form.get('Q_lev')))*60])
-                        return flask.render_template('add_questions.html',message="Submitted",tags=Question_subtopic[1:])
-                else:   
-                        return flask.render_template('add_questions.html',message="Logged in Successfully",tags=Question_subtopic[1:])
+                if flask.session['id'][:3]=='ADM':
+                        sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
+                        wks=sh.worksheet("Question_Details")
+                        wks2=sh.worksheet("Tags_dir")
+                        Question_subtopic = [[e[4], e[5]] for e in wks2.get_all_values()]
+                        if flask.request.form:
+                                Q_id='QA00000'
+                                QNo=str(len(wks.col_values(1))+1)
+                                Q_id=Q_id[:-len(QNo)]+str(QNo)
+                                Question_Domain=','.join([i[:3] for i in flask.request.form.getlist('Q_Topic')])
+                                Question_sub_Domain=','.join([i[:6] for i in flask.request.form.getlist('Q_Topic')])
+                                Question_topics=','.join(flask.request.form.getlist('Q_Topic'))
+                                wks.append_row([Q_id,flask.request.form.get('Q_img'),Question_Domain,Question_sub_Domain,Question_topics,
+                                                flask.request.form.get('Q_lev'),flask.request.form.get('Q_Len'),flask.request.form.get('Q_title'),
+                                                flask.request.form.get('Q_op_A'),flask.request.form.get('Q_op_B'),flask.request.form.get('Q_op_C'),flask.request.form.get('Q_op_D'),
+                                                flask.request.form.get('Q_Sol'),flask.request.form.get('Sol_img'),flask.request.form.get('Sol_title'),(int(flask.request.form.get('Q_Len'))+int(flask.request.form.get('Q_lev')))*60])
+                                return flask.render_template('add_questions.html',message="Submitted",tags=Question_subtopic[1:])
+                        else:   
+                                return flask.render_template('add_questions.html',message="Logged in Successfully",tags=Question_subtopic[1:])
+                else: 
+                        return flask.redirect(flask.url_for("admin.admin_login"))
         else:
                 return flask.redirect(flask.url_for("admin.admin_login"))        
 @admin.route('/administrators/modid=<mod>', methods=['GET','POST'])
 def administrator(mod='0'):
         if 'id' in flask.session:
-                if mod=='0':
-                        #print(mod)
-                        #print(flask.session['last_id'])
-                        if flask.request.form:
-                                postgres_insert_query="""INSERT INTO clients.details (clientid,email_id,client_name,cl_password,dob,target_exam,gender,college,college_location,client_course,semester,avatar,coins)
-                                        VALUES ('{0}','{1}','{2}','{3}',CURRENT_DATE,'GATE','MALE','DETS','Kalyani','Btech','7','NONE','0')
-                                        """.format(flask.request.form.get('Admin_id'),flask.request.form.get('Admin_email'),flask.request.form.get('Admin_name'),\
-                                                flask.request.form.get('Admin_pass'))
-                                a=postgres.postgres_connect(postgres_insert_query,commit=1)
-                                if a:
-                                        AdId=str(int((flask.session['last_id'])[3:])+1)
-                                        flask.session['last_id']=(flask.session['last_id'])[:-len(AdId)]+AdId
-                                        return flask.render_template('client_crud.html',message="Submitted",Next_ID=flask.session['last_id'])
+                if flask.session['id'][:3]=='ADM':
+                        if mod=='0':
+                                #print(mod)
+                                #print(flask.session['last_id'])
+                                if flask.request.form:
+                                        postgres_insert_query="""INSERT INTO clients.details (clientid,email_id,client_name,cl_password,dob,target_exam,gender,college,college_location,client_course,semester,avatar,coins)
+                                                VALUES ('{0}','{1}','{2}','{3}',CURRENT_DATE,'GATE','MALE','DETS','Kalyani','Btech','7','NONE','0')
+                                                """.format(flask.request.form.get('Admin_id'),flask.request.form.get('Admin_email'),flask.request.form.get('Admin_name'),\
+                                                        flask.request.form.get('Admin_pass'))
+                                        a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                                        if a:
+                                                AdId=str(int((flask.session['last_id'])[3:])+1)
+                                                flask.session['last_id']=(flask.session['last_id'])[:-len(AdId)]+AdId
+                                                return flask.render_template('client_crud.html',message="Submitted",Next_ID=flask.session['last_id'])
+                                        else:
+                                                return flask.render_template('client_crud.html',message="Failed",Next_ID=flask.session['last_id']) 
                                 else:
-                                        return flask.render_template('client_crud.html',message="Failed",Next_ID=flask.session['last_id']) 
+                                        return flask.render_template('client_crud.html',message="fill new admin details",Next_ID=flask.session['last_id'])
                         else:
-                                return flask.render_template('client_crud.html',message="fill new admin details",Next_ID=flask.session['last_id'])
+                                return flask.render_template('client_crud.html',message="yo",Next_ID=flask.session['last_id'])
                 else:
-                        return flask.render_template('client_crud.html',message="yo",Next_ID=flask.session['last_id'])
+                        return flask.redirect(flask.url_for("admin_login"))
         else:
-                return flask.redirect(flask.url_for("admin_login"))   
+                        return flask.redirect(flask.url_for("admin_login"))   
 @admin.route('/Generate_coupons',methods=['GET','POST'])
 def gen_coupons():
         if 'id' in flask.session:
+                if flask.session['id'][:3]!='ADM':
+                        return flask.redirect(flask.url_for("admin_login"))
                 if flask.request.form:
                         print(flask.request.form)
                         coupon=flask.request.form.get('coupons')+'-PID'+'-'.join(flask.request.form.get('product').split('||')[:2])+'-'+flask.request.form.get('client').split('||')[0]+'-'+str(random.randint(100000,999999))
@@ -114,7 +122,7 @@ def gen_coupons():
                         # print(postgres_insert_query)
                         a=postgres.postgres_connect(postgres_insert_query,commit=1)
                         if a:
-                                url = 'http://127.0.0.1:8000/send_email'
+                                url = 'https://aptee.onrender.com/send_email'
                                 payload={
                                         "id":flask.session['id'],
                                         "header":flask.request.form.get('client').split('||')[2]+ " Place Order for "+ flask.request.form.get('product').split('||')[2],
