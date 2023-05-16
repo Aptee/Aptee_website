@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block links %}
+<script src="https://kit.fontawesome.com/06c86bacc2.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
 {% endblock %}
 {% block title %}
 Aptee Dashboard
 {% endblock %}
 {% block content %}
-<script src="https://kit.fontawesome.com/06c86bacc2.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
     <div class="Holder">
       <!-- sidebar -->
       <div class="sidenav">
@@ -31,6 +31,11 @@ Aptee Dashboard
               <i class="fa-solid fa-bullseye"></i>
               <p>{{Data[5]}}</p>
           </div>
+          <div class="icon">
+            <i class="fa-solid fa-coin"></i>
+            <p>{{Data[13]}}</p>
+        </div>
+        
           
           
       </div>
@@ -50,8 +55,7 @@ Aptee Dashboard
         </div>    
       </div>
     </div>
+
 {%endblock%}
 {% block style %}
-    {% block scripts%}
-    {%endblock%}
 {% endblock %}

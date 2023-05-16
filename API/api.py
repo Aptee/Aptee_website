@@ -99,7 +99,32 @@ def purchase_through_coins():
                 return flask.jsonify({'msg':'Success','od_token':od_token,'otp':otp}),200
         else:
             return flask.jsonify({'msg':'Please Logout and Login Again'}),400
-    
+
+@api.route('/purchase_through_coupons/',methods=['POST'])
+def purchase_through_coupons():
+    """Rqruires : Id,email,Price,Product_id,Coupon_id"""
+    if 'id' in flask.request.get_json():
+        data=flask.request.get_json()
+        otp=random.randint(100000,999999)
+        od_token=data['id']+'-COUPONS-'+data['price']+'-'+datetime.now().strftime("%d%m%Y%H%M%S")+'-'+str(otp)
+        postgres_insert_query="""INSERT INTO ecommerce.orders
+        (email,product_id,coupon_id,order_total,order_disc,final_price,order_ts,client_id,od_token,comodity_id,complition_otp)
+        VALUES ('{0}','{1}','{3}','{4}','{4}','0',CURRENT_TIMESTAMP,'{2}','{7}','{5}','{6}')
+        """.format(data['email'],data['product_id'],data['id'],data['coupon'],int(data['price']),data['como_id'],otp,od_token)
+        a=postgres.postgres_connect(postgres_insert_query,commit=1)
+        # print(postgres_insert_query)
+        postgres_update_query="""UPDATE ecommerce.coupons 
+                                    SET expired = '1'
+                                    WHERE coupon_code = '{0}'""".format(data['coupon'])
+        a=postgres.postgres_connect(postgres_update_query,commit=1)
+        if int(data['product_id']) in (6,7,8,9):
+            postgres_insert_query = """INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
+                                        VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)""".format(data['id'],data['product_id'],int(data['price'])*20,0)
+            a=postgres.postgres_connect(postgres_insert_query,commit=1)
+        # print(postgres_insert_query)
+        return flask.jsonify({'msg':'Success','od_token':od_token,'otp':otp}),200
+    else:
+        return flask.jsonify({'msg':'Please Logout and Login Again'}),400
 
 
 

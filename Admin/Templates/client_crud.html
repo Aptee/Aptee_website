@@ -22,12 +22,11 @@
       <a id="flip" class="active" href="{{ url_for('admin.question_crud')}}">Add Question</a> 
       <a id="modifyclick" href="#test">Modify Questions</a>
       <a id="verifyclick" href="#analysis">Verify Logs</a>
-      <a href="#coin">User Verification</a>
+      <a href="{{ url_for('admin.gen_coupons')}}">ADD COUPONS</a>
       <a href="{{ url_for('admin.administrator',mod=0)}}">Modify Administrators</a>
       <a href="{{ url_for('admin.administrator',mod=0)}}">Add Administrators</a>
       <a href="{{ url_for('admin.logout')}}">Logout</a>
-    </div>
-        
+    </div>    
           
   <!--form to add the new item in the list-->
 

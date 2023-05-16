@@ -54,9 +54,9 @@
         </div>
         <div class="info-list">
             <div class="infoquestion"> 	
-               Questin No: <br><br> {{Question[7]}}</div>
+               Question No: <br><br> {{Question[7]}}</div>
             
-                <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile)}}" method="post" class="form" >
+                <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile,Token=Token)}}" method="post" class="form" >
                    <input type="radio" id="op1" name="mcq" value="A">
                     <label for="op1">&nbsp&nbsp{{Question[8]}}</label><br>
                    <input type="radio" id="op2" name="mcq" value="B">

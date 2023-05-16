@@ -27,8 +27,13 @@ def Test(msg="",alert=0):
             Cooldown_test=[e[1] for e in Cooldown_test]
             #print(Cooldown_test)
             Tests=[a for a in Tests if a not in Cooldown_test]
+            # print(Tests)
             Test_names=keygenerator.get_Test_names(Tests)
-            #print(Test_names)
+            print(len(Test_names[-1])==1)
+            if len(Test_names)==0:
+                Test_names=[]
+            elif len(Test_names[-1])==1:
+                Test_names=Test_names[:-1]
         if len(msg):
             return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names,message=msg,alert_colour=alert)    
         return flask.render_template('select_exam.html',form=form,id=flask.session['id'],Tests=Test_names)
@@ -39,21 +44,24 @@ def Test(msg="",alert=0):
 @test.route('/Random_Test/Mobile=<Mobile>',methods=['GET','POST'])
 @test.route('/Daily_Test/Id=<qid>&Mobile=<Mobile>',methods=['GET','POST'])
 @test.route('/Reattempt/ID=<qid>&Mobile=<Mobile>&Token=<Token>',methods=['GET','POST'])
-def daily(qid=0,Mobile=0,Token=""):
+def daily(qid='0',Mobile=0,Token=" ",is_random=0):
     form = SignupForm(flask.request.form)
     sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1vYStVgetyDmsbZ-AXfiSvTRXwpTxsLaH4FFa1weFZ-I/edit?usp=sharing')
     wks=sh.worksheet("Question_Details")
-    if qid==0:
+    print(qid,Token)
+    if qid=='0' and len(Token)==1:
+        is_random=1
         test_row=random.randint(2,127)
         test_id='RANDOM'
-        qid='QA00000'+str(test_row)
-    elif qid!=0 and len(Token)>1:
+        qid='QA'+'0'*(5-len(str(test_row)))+str(test_row)
+    elif len(Token)>1:
         test_id='REATTEMPT'
         test_row=int(qid[2:])+1
     else:
-        test_id='RECOMMEND'
+        test_id='RANDOM'
         test_row=int(qid[2:])+1
     row =wks.row_values(test_row)
+    print(test_id)
     #row=wks.row_values(random.randint(2,16))
     # print(row)
     if 'attempt' in flask.session and 'id' not in flask.session:
@@ -87,11 +95,12 @@ def daily(qid=0,Mobile=0,Token=""):
                                                                              row[15],row[4],row[5],row[6],submitted,test_id)
                 a=postgres.postgres_connect(postgres_insert_query,commit=1)
                 if a:
-                    postgres_insert_query = """
-                                            INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
-                                            VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)
-                                            """.format(flask.session['id'],row[0],10,0)
-                    a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                    if correct==True:
+                        postgres_insert_query = """
+                                                INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
+                                                VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)
+                                                """.format(flask.session['id'],row[0],10,0)
+                        a=postgres.postgres_connect(postgres_insert_query,commit=1)
                     return flask.redirect(flask.url_for("test.Test",msg="You Have Completed The Test",alert=1))
                     #return flask.render_template('select_exam.html',form=form,message="You Have Completed the Test",alert_colour=1,id=flask.session['id'])
                 else:
@@ -100,9 +109,9 @@ def daily(qid=0,Mobile=0,Token=""):
             else:
                 if len(row)!=0:
                     if Mobile=='1':
-                        return flask.render_template('mobileExam_Daily.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
+                        return flask.render_template('mobileExam_Daily.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile,Token=Token,is_random=is_random)
                     else:
-                        return flask.render_template('daily_questions.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile)
+                        return flask.render_template('daily_questions.html',Client=client[0],Question=row,timer=int(row[15]),form=form,qid=qid,Mobile=Mobile,Token=Token,is_random=is_random)
                         #return flask.render_template('daily_questions.html',Client=client[0],Question=row,form=form)
                 else:
                     return flask.redirect(flask.url_for("test.Test",msg="We've Encountered some Error Please Try Again",alert=0))        

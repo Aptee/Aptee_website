@@ -17,16 +17,17 @@
   <div class="wrapper">
 
     <!-- Dashboard -->
-    <div class="sidebar">
-      <img  src="https://drive.google.com/uc?export=veiw&id=19IWDKFqHXT9JcpHwHJlap6Uemw4rJ9rI" class="avatar">
-      <a id="flip" class="active" href="{{ url_for('admin.question_crud')}}">Add Question</a> 
-      <a id="modifyclick" href="#test">Modify Questions</a>
-      <a id="verifyclick" href="#analysis">Verify Logs</a>
-      <a href="{{ url_for('admin.gen_coupons')}}">ADD COUPONS</a>
-      <a href="{{ url_for('admin.administrator',mod=0)}}">Modify Administrators</a>
-      <a href="{{ url_for('admin.administrator',mod=0)}}">Add Administrators</a>
-      <a href="{{ url_for('admin.logout')}}">Logout</a>
-    </div>    
+      <div class="sidebar">
+        <img  src="https://drive.google.com/uc?export=veiw&id=19IWDKFqHXT9JcpHwHJlap6Uemw4rJ9rI" class="avatar">
+        <a id="flip" class="active" href="{{ url_for('admin.question_crud')}}">Add Question</a> 
+        <a id="modifyclick" href="#test">Modify Questions</a>
+        <a id="verifyclick" href="#analysis">Verify Logs</a>
+        <a href="{{ url_for('admin.gen_coupons')}}">ADD COUPONS</a>
+        <a href="{{ url_for('admin.administrator',mod=0)}}">Modify Administrators</a>
+        <a href="{{ url_for('admin.administrator',mod=0)}}">Add Administrators</a>
+        <a href="{{ url_for('admin.logout')}}">Logout</a>
+      </div>
+          
   <!--form to add the new item in the list-->
 
     <div class="panel" id="panel">
@@ -34,15 +35,16 @@
       <div>
       {{message}}
       </div>
-      <form class="form" action="{{ url_for('admin.question_crud')}}" method="post">
+      <form class="form" action="{{ url_for('admin.gen_coupons')}}" method="post">
 
         <div class="row">
           <div class="col-md-6 mb-4">
             <div class="name form-outline "> 
-              <label class="form-label" for="firstName">Is Your Question an Image</label>
-                <select id="op" name="Q_img" id="Select">
-                  <option value="0">False</option>
-                  <option value="1">True</option>
+              <label class="form-label" for="firstName">Has The Payment Been Made?</label>
+                <select id="op" name="status" id="Select">
+                  <option value="PAID">Paid</option>
+                  <option value="PROCESSING">Payment Unverified</option>
+                  <option value="FAILED">Failed</option>
                 </select>
             </div>
           </div>
@@ -50,29 +52,41 @@
         <div class="row">
         <div class="col-md-6 mb-4">
         <div class="name form-outline "> 
-        <label class="form-label">What is the topics of your Questions </label>
-
+        <label class="form-label">Product Name </label>
         <div id="myDropdown" class="dropdown-content">
         <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-        <select class="topic" name="Q_Topic" id="Select" multiple>
-        {%for i in tags%}
-        <option value="{{i[0]}}">{{i[1]}}</option>
+        <select class="topic" name="product" id="Select">
+        {%for i in details%}
+        <option value="{{i[0]}}||{{i[4]}}||{{i[1]}}">{{i[1]}}</option>
         {%endfor%}
         </select>
         </div>
-
         </div>
         </div>
         </div>
         <div class="row">
+            <div class="col-md-6 mb-4">
+            <div class="name form-outline "> 
+            <label class="form-label">Client Email </label>
+            <div id="myDropdown1" class="dropdown-content">
+            <input type="text" placeholder="Search.." id="myInput1" onkeyup="filterFunction1()">
+            <select class="topic" name="client" id="Select">
+            {%for i in cl_details%}
+            <option value="{{i[0]}}||{{i[1]}}||{{i[2]}}">{{i[1]}} &nbsp; {{i[2]}} </option>
+            {%endfor%}
+            </select>
+            </div>
+            </div>
+            </div>
+            </div>
+        <div class="row">
         <div class="col-md-6 mb-4">
-
         <div class="name form-outline "> 
-        <label class="form-label">What is the Question Level</label>
-        <select id="op" name="Q_lev" id="Select">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+        <label class="form-label">Select Coupon Type</label>
+        <select id="op" name="coupons" id="Select">
+        <option value="UPI">UPI</option>
+        <option value="CARD">CARD</option>
+        <option value="NET">NET BANKING</option>
         </select>
         </div>
         </div>
@@ -81,97 +95,10 @@
         <div class="col-md-6 mb-4">
 
         <div class="name form-outline "> 
-        <label class="form-label">What is the Question Lenght</label>
-        <select id="op" name="Q_Len" id="Select">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        </select>
+        <label class="form-label">ENTER TRANSACTION ID "no" if processing</label>
+        <input type="text" id="Text" name="transaction" placeholder="Enter Question Id" required><br><br>
         </div>
         </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">What is the Question Title (add id of the image id question is image if the options are image too include options in question and wite options as A,B,C,D)</label>
-        <label class="form-label">Question Id</label>
-        <input type="text" id="Text" name="Q_title" placeholder="Enter Question Id"><br><br>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">Option A</label>
-        <input type="text" id="Text" name="Q_op_A" placeholder="Is option A?">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">Option B</label>
-        <input type="text" id="Text" name="Q_op_B" placeholder="Is option B?">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">Option C</label>
-        <input type="text" id="Text" name="Q_op_C" placeholder="Is option C?">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">Option D</label>
-        <input type="text" id="Text" name="Q_op_D" placeholder="Is option D?">
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label">What is the Solution Option</label>
-        <select id="op" name="Q_Sol" id="Select">
-        <option value="A">A</option>
-        <option value="B">B</option>
-        <option value="C">C</option>
-        <option value="D">D</option>
-        </select>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-
-        <div class="name form-outline "> 
-        <label class="form-label" for="firstName">Is Your Solution an Image</label>
-        <select id="op" name="Sol_img" id="Select">
-        <option value="0">False</option>
-        <option value="1">True</option>
-        </select>
-        </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="col-md-6 mb-4">
-        <div class="name form-outline "> 
-        <label class="form-label">What is the Solution (add id of the image if Solution is an image)</label>
-        <input type="text" id="Text" name="Sol_title" placeholder="Enter solution Id"><br><br>
-        </div>
-        </div>
-        </div>
-        <div>
-          
         </div>
         <div class="sub_button text-center"><button style="vertical-align:middle" type="submit" class="btn btn-primary btn-lg">Submit</button></div>
       </form>
@@ -189,6 +116,21 @@
       input = document.getElementById("myInput");
       filter = input.value.toUpperCase();
       div = document.getElementById("myDropdown");
+      a = div.getElementsByTagName("option");
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+    function filterFunction1() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("myInput1");
+      filter = input.value.toUpperCase();
+      div = document.getElementById("myDropdown1");
       a = div.getElementsByTagName("option");
       for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
@@ -233,7 +175,6 @@
       }
       .topic{
         width: 500px;
-        height: 200px;
       }
       #op{
         height: 40px;
