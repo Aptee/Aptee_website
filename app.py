@@ -59,7 +59,7 @@ def home():
                 return flask.render_template('index.html',form=form,id=id)
         else:
                 if form.email_id.data:
-                        url = 'https://aptee.onrender.com/api/verify_usr'
+                        url = 'http://127.0.0.1:8000/api/verify_usr'
                         payload = {
                                     "email": form.email_id.data.lower(),
                                     "pass":form.password.data
@@ -212,7 +212,7 @@ def email_link():
                 return flask.jsonify({'msg':'You Do not have the access to view this'}),400
 @app.route('/api_test',methods=['GET','POST'])
 def api_test():
-        url = 'https://aptee.onrender.com/api/purchase_through_coins'
+        url = 'http://127.0.0.1:8000/api/purchase_through_coins'
         # payload = {
         #             "email": form.email_id.data.lower(),
         #             "pass":form.password.data

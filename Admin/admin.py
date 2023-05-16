@@ -3,6 +3,9 @@ import gspread
 import keygenerator
 import datetime
 import postgres
+import requests
+import json
+import random
 from Form_model import SignupForm
 admin= flask.Blueprint('admin', __name__,template_folder='Templates')
 
@@ -19,38 +22,30 @@ def admin_login():
                         return flask.redirect(flask.url_for("admin.question_crud"))
         else:
                 if form.email_id.data:
-                        postgres_find_query="""
-                                with df as (SELECT * from clients.details det 
-                                WHERE det.email_id like '{0}'
-                                ),
-                                df2 as (
-                                SELECT * from clients.details d 
-                                order by REPLACE(d.clientid,'ADM','')::INTEGER desc
-                                LIMIT 1
-                                )
-                                SELECT * from df
-                                UNION ALL
-                                SELECT * from df2
-                        """.format(form.email_id.data)
-                        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
-                        details=[list(e) for e in res]
-                       
-                        if len(details)==2:
-                                if len(err)==0 and form.password.data!=details[0][3]:
-                                        return flask.render_template('admin_login.html',form=form,message="Password incorrect")
-                                elif len(err)==0 and form.password.data==details[0][3]:
-                                        
-                                        if details[0][0][:3]=='ADM':
-                                                flask.session['id']=details[0][0]
-                                                flask.session['last_id']=details[1][0]
-                                                AdId=str(int((flask.session['last_id'])[3:])+1)
-                                                flask.session['last_id']=(flask.session['last_id'])[:-len(AdId)]+AdId
-                                                return flask.redirect(flask.url_for("admin.question_crud"))
-                                        else:
-                                                return flask.render_template('admin_login.html',form=form,message="You are not an admin please contact Super Administrator")
-                        else:
-                                return flask.render_template('admin_login.html',form=form,message="We couldnt find your email in our DB please contact Super Administrator")         
-        
+                        url = 'http://127.0.0.1:8000/api/verify_usr'
+                        payload = {
+                                    "email": form.email_id.data.lower(),
+                                    "pass":form.password.data
+                                }
+                        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+                        r = requests.post(url, data=json.dumps(payload), headers=headers)
+                        # print(r.status_code)
+                        try:
+                                data =r.json()
+                        except:
+                                flask.session.pop('id',None)
+                                return flask.render_template('admin_login.html',form=form,message="")
+                        if r.status_code == 400:
+                                return flask.render_template('admin_login.html',form=form,message="Password incorrect or Not an Admin")
+                        elif r.status_code == 200:
+                                print(data['id'])
+                                if data['id'][:3]=='ADM':
+                                        flask.session['id']=data['id']
+                                        return flask.redirect(flask.url_for("admin.question_crud"))
+                                else:
+                                        return flask.render_template('admin_login.html',form=form,message="You are not an admin please contact Super Administrator")   
+                else:
+                        return flask.render_template('admin_login.html',form=form,message="")
         return flask.render_template('admin_login.html',form=form,message="")
         
 @admin.route('/admin_panel/',methods=['GET','POST'])
@@ -100,6 +95,55 @@ def administrator(mod='0'):
                         return flask.render_template('client_crud.html',message="yo",Next_ID=flask.session['last_id'])
         else:
                 return flask.redirect(flask.url_for("admin_login"))   
+@admin.route('/Generate_coupons',methods=['GET','POST'])
+def gen_coupons():
+        if 'id' in flask.session:
+                if flask.request.form:
+                        print(flask.request.form)
+                        coupon=flask.request.form.get('coupons')+'-PID'+'-'.join(flask.request.form.get('product').split('||')[:2])+'-'+flask.request.form.get('client').split('||')[0]+'-'+str(random.randint(100000,999999))
+                        print(flask.request.form.get('client').split('||'))
+                        if flask.request.form.get('transaction') !='no' and flask.request.form.get('status') == 'PAID':
+                                expired=0
+                        else:
+                                expired=1
+                        postgres_insert_query="""INSERT INTO ecommerce.coupons(coupon_code,product_id,price_disc,status,payment_id,expired)
+                                                VALUES ('{0}','{1}','{2}','{3}','{4}','{5}')
+                                        """.format(coupon,flask.request.form.get('product').split('||')[0],
+                                                   flask.request.form.get('product').split('||')[1],flask.request.form.get('status'),
+                                                   flask.request.form.get('transaction'),expired)
+                        # print(postgres_insert_query)
+                        a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                        if a:
+                                url = 'http://127.0.0.1:8000/send_email'
+                                payload={
+                                        "id":flask.session['id'],
+                                        "header":flask.request.form.get('client').split('||')[2]+ " Place Order for "+ flask.request.form.get('product').split('||')[2],
+                                        "emails":flask.request.form.get('client').split('||')[1],
+                                        "email_template":'Purchase_success.html',
+                                        "param":flask.request.form.get('client').split('||')[2]+'||'+flask.url_for("ecm.purchase",cid=flask.request.form.get('client').split('||')[0]
+                                                                                                                   ,coupon=coupon)
+                                }
+                                headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+                                # json.dumps(payload)
+                                r = requests.post(url, data=json.dumps(payload), headers=headers)
+                                if r.status_code==200:
+                                        return flask.render_template('gen_coupons.html',message="Email Sent")
+                                else:
+                                        return flask.render_template('gen_coupons.html',message="Error Sending Email")
+                        else:
+                                return flask.render_template('gen_coupons.html',message="Error Sending Email")
+                else:
+                        postgres_find_query="""SELECT * from ecommerce.product"""
+                        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
+                        details=[list(e) for e in res]
+                        #print(details)
+                        postgres_find_query="""SELECT * from clients.details"""
+                        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
+                        cl_details=[list(e) for e in res]
+                        #print(cl_details)
+                        return flask.render_template('gen_coupons.html',details=details,cl_details=cl_details)
+        else:
+                return flask.redirect(flask.url_for("admin.admin_login"))
 
 @admin.route('/logout',methods=['GET','POST'])
 def logout():

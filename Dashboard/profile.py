@@ -23,15 +23,18 @@ def usr_profile(msg="",alert=0):
             client=[list(e) for e in res]
             client=client[0]
         #print(client)
-        if len(client[-2]):
+        if client[-2]:
             verify=1
         else:
             verify=0
-        postgres_find_query="""
-        SELECT att.questionid,att.question_subtopic,att.question_level,att.time_taken,att.correct from clients.attempts att
-        where att.clientid like '{0}' and att.correct::BOOLEAN = FALSE
-        ORDER by att.attempt_time DESC,att.question_level ASC
-        LIMIT 4
+        postgres_find_query="""SELECT * from (SELECT * from (SELECT att.questionid,att.question_subtopic,att.question_level,att.time_taken,att.correct,att.test_id from clients.attempts att
+where att.clientid like 'CL13052023210641' and att.correct::BOOLEAN = FALSE and att.test_id like '%RANDOM%'
+               LIMIT 2) a2
+UNION
+SELECT * from (SELECT te.questionid,te.question_subtopic,te.question_level,te.time_taken,te.correct,te.test_id from clients.attempts te 
+where te.clientid like 'CL13052023210641' and te.correct::BOOLEAN = FALSE and te.test_id like '%TI%'
+              LIMIT 2) a3) a1
+order by a1.test_id
         """.format(flask.session['id'])
         res,err=postgres.postgres_connect(postgres_find_query,commit=0)
         sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
@@ -51,6 +54,7 @@ def usr_profile(msg="",alert=0):
                     topics.append(topic[[x[0] for x in topic].index(d[1].split(',')[i])][1])
                 d.append(','.join(topics))
                 topics=[]
+        print(questions)
         if len(msg)==0:
             return flask.render_template('Profile.html',Data=client,form=form,id=flask.session['id'],verify=verify,Ques=questions,row=row)
         else:

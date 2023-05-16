@@ -16,7 +16,7 @@
         <a href="{{ url_for('resend_otp')}}"><button id="submit_btn" type="submit" class="btn btn-success next">Resend OTP</button></a>
     </div>
     {%endif%}
-    <h1>&nbsp;Recent Failed Attempts</h1>
+    <h1>&nbsp;Recent Failed Questions</h1>
              {%if Ques%}
                 <div class="two_box">
                     <div class="test_box">
@@ -46,31 +46,30 @@
                         <p>Level : {{Ques[1][2]}}</p>
                     </div>
                 </div>
+                <h1>&nbsp;Recent Failed Tests</h1>
                 <div class="two_box">
                     <div class="test_box">
                         <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
                             <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
                             <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
-                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
-                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
-                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[2][0]}}" hidden>
-                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                            <input id = "feild_txt" type="text" name = "product_id" value="2" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="1500" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[2][5]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 1500 Coins<i class="fa-solid fa-arrow-right"></i></button>
                         </form>
-                        <p>Question Topic : {{Ques[2][5]}}</p>
-                        <p>Time Taken : {{Ques[2][3]|int /100}}</p>
+                        <p>Test Topic : {{Ques[2][6]}}</p>
                         <p>Level : {{Ques[2][2]}}</p>
                     </div>
                     <div class="test_box">
                         <form action="{{ url_for('ecm.cart')}}" method="post" class="form" >
                             <input id = "feild_txt" type="text" name = "product" value="Reattempt Question" hidden>
                             <input id = "feild_txt" type="text" name = "ap_coin" value="1" hidden>
-                            <input id = "feild_txt" type="text" name = "product_id" value="1" hidden>
-                            <input id = "feild_txt" type="text" name = "price" value="100" hidden>
-                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[3][0]}}" hidden>
-                            <button type="submit" id= "submit_btn">Re-attempt for 100 Coins<i class="fa-solid fa-arrow-right"></i></button>
+                            <input id = "feild_txt" type="text" name = "product_id" value="2" hidden>
+                            <input id = "feild_txt" type="text" name = "price" value="1500" hidden>
+                            <input id = "feild_txt" type="text" name = "como_id" value="{{Ques[3][5]}}" hidden>
+                            <button type="submit" id= "submit_btn">Re-attempt for 1500 Coins<i class="fa-solid fa-arrow-right"></i></button>
                         </form>
-                        <p>Question Topic : {{Ques[3][5]}}</p>
-                        <p>Time Taken : {{Ques[3][3]|int /100}}</p>
+                        <p>Test Topic : {{Ques[3][6]}}</p>
                         <p>Level : {{Ques[3][2]}}</p>
                     </div>
                 </div>
@@ -88,7 +87,7 @@
 {% block scripts%}
 <style>
     .details{
-        margin-left: 21vw;
+        margin-left: 3vw;
         width: 74vw;
         height: 71vh;
         background-color: whitesmoke;
