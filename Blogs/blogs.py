@@ -11,19 +11,17 @@ gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 @blog.route('/',methods=['GET','POST'])
 def blog_home(msg="",alert=0):
     form = SignupForm(flask.request.form)
+    sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
+    wks=sh.worksheet("Blogs")
+    row=wks.batch_get(['A3:L4'])
     if 'id' in flask.session:
-        sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
-        wks=sh.worksheet("Blogs")
-
-        #randomlist = random.sample(range(10, 30), 5)
-        #row =wks.row_values(2)
-        row=wks.batch_get(['A3:L4'])
         if len(msg)==0:
             return flask.render_template('Blog_homepage.html',form=form,Blog_list=row[0],id=flask.session['id'])
         else:
             return flask.render_template('Blog_homepage.html',form=form,Blog_list=row[0],message=msg,alert_colour=alert)
     else:
         return flask.render_template('Blog_homepage.html',form=form,Blog_list=row[0])
+
 @blog.route('/Post/<postid>')
 def blog_post(postid=""):
     form = SignupForm(flask.request.form)
