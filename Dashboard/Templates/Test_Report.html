@@ -1,16 +1,141 @@
-{% extends 'Dashboard.html' %}
+{% extends 'base.html' %}
+{% block links %}
+<script src="https://kit.fontawesome.com/06c86bacc2.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
+{% endblock %}
+{% block title %}
+Test Report
+{% endblock %}
+{% block content%}
+<div class="dashboard_navbar">
+  <ul>
+      <li><a  href="{{ url_for('profile.usr_profile')}}">Profile</a></li>
+      <li><a class="active" href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
+      <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
+      <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
+      <li><a href="">Shop</a></li>
+  </ul>
+</div>
+<h1 style="padding-top: 3vh;font-family: cursive;text-align: center;">Your Result</h1>
+<table>
+	<tr>
+		<th>Question No</th>
+		<th>Your Solution</th>
+		<th>Submitted</th>
+  
+		<th>Toughness</th>
+		<th>Length</th>
+    <th>% of People who Got it right</th>
+		<th>% of People Who Skipped</th>
+    <th>Your Time</th>
+		<th>Average Time Taken For Other People To Solve</th>
+		<th>Average Time Taken For Other People To Skip</th>
+	</tr>
+  {%if table%}
+  {%for i in range(table|length)%}
+  {%if table[i][2] == 'True'%}
+      <tr id="row-green">
+  {%else%}
+      <tr id="row-red">
+  {%endif%}
+          <td>{{i+1}}</td>
+          <!-- <td>{{table[i][2]}}</td> -->
 
-{% block data%}
-<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 21vw;"></div>
-<div style="display: flex;width:74vw;padding-top: 5vh;margin-left: 25vw;">
+          {%if table[i][2] == 'True'%}
+          <td id="col-green">True</td>
+          {%else%}
+          <td id="col-red">False</td>
+          {%endif%}
+
+          {%if table[i][3] == '1'%}
+          <td>Submitted</td>
+          {%else%}
+          <td id = "col-yellow">Skipped</td>
+          {%endif%}
+          
+          <td>{{table[i][4]}}</td>
+          <td>{{'Level ' + table[i][5]}}</td>
+          <td>{{"%.2f"|format(((table[i][10]/table[i][12])*100))}} %</td>
+          <td>{{"%.2f"|format(((table[i][13]/(table[i][13]+table[i][12]))*100))}} %</td>
+          {%if table[i][14]%}
+            {%if (table[i][14]|float)/1000 > (table[i][8]|int)/1000 %}
+              <td id="col-green">{{(table[i][8]|int)/1000}}</td>
+            {%else%}
+              <td id="col-red">{{(table[i][8]|int)/1000}}</td>
+            {%endif%}
+          {%else%}
+            <td>{{(table[i][8]|int)/1000}}
+          {%endif%}
+          {%if table[i][14]%}
+              <td>{{"%.2f"|format((table[i][14]|float)/1000)}}</td>
+          {%else%}
+          <td>No Data</td>
+          {%endif%}
+          {%if table[i][15]%}
+          <td>{{"%.2f"|format((table[i][15])/1000)}}</td>
+          {%else%}
+          <td>No Data</td>
+          {%endif%}
+          
+
+          <!-- 
+          <td>{{i[16]}}</td>
+          <td>{{i[17]}}</td> -->
+      </tr>
+  {%endfor%}
+  {%endif%}
+</table>
+
+<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 15vw;"></div>
+<div style="display: flex;width:74vw;padding-top: 10vh;margin-left: 17vw;">
   <div id="donutchart" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin: auto;"></div>
   <div id="donutchart1" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin:auto;"></div>
 </div>
 {%endblock%}
 
-{% block scripts%}
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
+{% block style%}
+
+<style>
+  table{
+			border-collapse: collapse;
+			width: 93%;  
+      margin: 50px;
+      text-align: center;
+		}
+	th,td{
+		border: 2px solid crimson; 
+		padding: 15px;
+	}
+  #row-red{
+    background-color: rgb(255, 157, 157);
+  }
+  #row-green{
+    background-color: rgb(134, 252, 134);
+  }
+  #col-red{
+    background-color: rgb(255, 82, 82);
+  }
+  #col-green{
+    background-color: rgb(70, 156, 70);
+  }
+  #col-yellow{
+    background-color: rgb(255, 245, 57);
+  }
+  #col-gray{
+    background-color: gray;
+  }
+  #col-blue{
+    background-color: blue;
+  }
+</style>
+
+<script>
+  function b(){
+    console.log('j');
+  }
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
     var pie = '{{pie}}';
     pie=pie.split(',');
     var newArr = [];

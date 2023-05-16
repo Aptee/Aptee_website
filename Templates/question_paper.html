@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>A4 Page</title>
+</head>
+<body>
+	<button class="button-print-or-save-document A4Button">Print</button>
+	<page size="A4">
+		<h1>Aptee Recommended Question</h1>
+		<hr>
+		<div class="question">
+			{%if data%}
+			{%for i in range(7)%}
+			<h4>({{data[i][1]}}.) {{data[i][2]}}</h4>
+			<span>(A.) {{data[i][3]}}</span>
+			<span>(B.) {{data[i][4]}}</span>
+			<br>
+			<span>(C.) {{data[i][5]}}</span>
+			<span>(D.) {{data[i][6]}}</span>
+			{%endfor%}
+			{%endif%}
+
+
+		</div>
+	</page>
+	<page size="A4">
+		<div class="question">
+			{%if data%}
+			{%for i in range(7,15)%}
+			<h4>({{data[i][1]}}.) {{data[i][2]}}</h4>
+			<span>(A.) {{data[i][3]}}</span>
+			<span>(B.) {{data[i][4]}}</span>
+			<br>
+			<span>(C.) {{data[i][5]}}</span>
+			<span>(D.) {{data[i][6]}}</span>
+			{%endfor%}
+			{%endif%}
+		</div>
+	</page>
+	
+
+<style>
+	body {
+  background: rgb(204,204,204); 
+}
+page {
+  background: white;
+  border:2px solid crimson;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+  font-family: calibri;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: 29.7cm; 
+}
+.question h4{
+	padding-left: 20px;
+	margin: 10px;
+}
+.question span{
+	margin: 10px;
+	padding: 50px;
+}
+.A4Button{
+	/*position: absolute;*/
+	margin-left: 85vw;
+	margin-top: 10px;
+	background-color: crimson;
+	color: white;
+	position: fixed;
+	outline: none;
+	border:none;
+	font-size: 20px;
+	border-radius: 5px;
+}
+.A4Button:hover{
+	cursor: pointer;
+	background-color: white;
+	color: crimson;
+	border:3px solid crimson;
+}
+h1{
+	text-align: center;
+	font-family: calibri;
+	color: crimson;
+}
+
+@media print {
+  body, page {
+    margin: 0;
+    box-shadow: 0;
+  }
+}
+
+</style>
+<script >
+	const buttonPrintOrSaveDocument = document.querySelector(
+	".button-print-or-save-document"
+);
+
+function printOrSave() {
+	window.print();
+}
+
+buttonPrintOrSaveDocument.addEventListener("click", printOrSave);
+
+</script>
+</body>
+</html>

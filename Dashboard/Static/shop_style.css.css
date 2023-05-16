@@ -1,0 +1,69 @@
+.container {
+ /* height: 700px;
+  width: 600px;*/
+  background-color: white;
+    left: 50%;
+  margin: auto;
+  margin-top: 0px;
+}
+  
+.main-content {
+  height: 335px;
+  background-color: crimson;
+  border-bottom-left-radius: 90px;
+  border-bottom-right-radius: 80px;
+  border-top: #1e6b30;
+}
+  
+.text {
+  text-align: center;
+  font-size: 300%;
+  text-decoration: aliceblue;
+  color: aliceblue;
+  font-family: cursive;
+}
+  
+.course {
+  color: black;
+  font-size: 25px;
+  font-weight: bolder;
+}
+  
+.centre-content {
+  height: 280px;
+  margin: -100px 20px 20px;
+  color: crimson;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 25px;
+  padding-top: 0.5px;
+  background-color: white;
+  border:2px solid crimson;
+}
+  
+.centre-content-h1 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-weight: normal;
+}
+  
+
+  
+.pay-now-btn {
+  cursor: pointer;
+  color: #fff;
+  height: 50px;
+  width: 290px;
+  border: none;
+  margin-top: 60px;
+  margin-left: 600px;
+  background-color: crimson;
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+}
+.pay-now-btn:hover{
+    background-color: white;
+    color: crimson;
+    border:2px solid crimson;
+  }

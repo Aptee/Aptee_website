@@ -1,27 +1,47 @@
 {% extends 'base.html' %}
-
+{% block title %}
+Coin History
+{% endblock %}
 {% block content%}
 <link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
 <div class="main">
-    <div class="dashboard_navbar">
-        <ul>
-            <li><a  href="">Profile</a></li>
-            <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
-            <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
-            <li><a class="active" href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
-            <li><a href="">Shop</a></li>
-        </ul>
-    </div>
-<div class="details">
-    {{Data}}
-    {{Data[1]}}
+<div class="dashboard_navbar">
+    <ul>
+        <li><a  href="{{ url_for('profile.usr_profile')}}">Profile</a></li>
+        <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
+        <li><a href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
+        <li><a class="active" href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
+        <li><a href="{{ url_for('profile.usr_shop')}}">Shop</a></li>
+    </ul>
 </div>
-{%endblock%}
-
-{% block scripts%}
-<style>
-    .details{
-        margin-left: 21vw;
-    }
-</style>
-{%endblock%}
+<div class="details">
+    <h1 style="text-align: center;padding-top: 5vh;">Your Coin History</h1>
+    
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Coin Gained</th>
+        <th>Coin Spent</th>
+      </tr>
+        {%if Data%}
+        {%for i in Data%}
+            <tr>
+                <td>{{i[4]}}</td>
+                <td>{{i[2]}}</td>
+                <td>{{i[3]}}</td>
+            </tr>
+        {%endfor%}
+        {%endif%}
+    </table>
+    </div>
+    {%endblock%}
+    
+    {% block scripts%}
+    
+    <style>
+        .details{
+            margin-left: 21vw;
+        }
+    
+    </style>
+    {%endblock%}

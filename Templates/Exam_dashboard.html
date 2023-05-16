@@ -15,7 +15,7 @@
 <body>
 
     <!-- sidebar dashboard -->
-    <div class="container-fluid" style="background-color: rgb(89, 238, 226);">
+    <div class="container-fluid" style="background-color: crimson">
   
       <div class="row">
         <div class="col-sm-3">
@@ -73,7 +73,7 @@
           <h3>Please Click the START QUIZ button to open the quiz questions.</h3>
           <input id = "feild_txt" type="text" name="First_Q" value="1" hidden>
           <input id = "feild_stack" type="text" name="Questions" value="{{Questions}}" hidden>
-          <button type="submit">Start Quiz</button>
+          <button type="submit" id="startQuiz">Start Quiz</button>
       </form>
     </div>
 
@@ -116,6 +116,13 @@
       </div>
       </div>
     </div>
+    <style>
+      #startQuiz:hover{
+        background-color: white;
+        border: 3px solid crimson;
+        color: crimson;
+      }
+    </style>
     
     <script src="{{ url_for('static',filename='Exam_dashboard_js.js') }}"></script>
     <script>

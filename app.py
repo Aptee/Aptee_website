@@ -21,7 +21,7 @@ from Ecommerce.ecm import ecm
 #configuring flask app
 app = flask.Flask(__name__, template_folder="Templates",static_folder='Static')
 
-app.config['SECRET_KEY']='xd1ssgZnh\xe51M\x898\x13e\xbdt'+str(datetime.today().strftime("%d/%m/%Y"))
+app.config['SECRET_KEY']='xdwj1ssgZnh\xe51M\x898\x13e\xbdt'+str(datetime.today().strftime("%d/%m/%Y"))
 mail=Mail(app)
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -59,7 +59,7 @@ def home():
                 return flask.render_template('index.html',form=form,id=id)
         else:
                 if form.email_id.data:
-                        url = 'http://127.0.0.1:8000/api/verify_usr'
+                        url = 'https://aptee.onrender.com/api/verify_usr'
                         payload = {
                                     "email": form.email_id.data.lower(),
                                     "pass":form.password.data
@@ -212,7 +212,7 @@ def email_link():
                 return flask.jsonify({'msg':'You Do not have the access to view this'}),400
 @app.route('/api_test',methods=['GET','POST'])
 def api_test():
-        url = 'http://127.0.0.1:8000/api/purchase_through_coins'
+        url = 'https://aptee.onrender.com/api/purchase_through_coins'
         # payload = {
         #             "email": form.email_id.data.lower(),
         #             "pass":form.password.data

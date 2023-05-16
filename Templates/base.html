@@ -26,6 +26,7 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
       <link href="https://drive.google.com/uc?export=veiw&id=1Pw_ZVRjnTFUCrI-RFUAaa4oMF3xJDCbL" rel="stylesheet">
+      <link rel="icon" type="image/x-icon" href="https://drive.google.com/uc?export=veiw&id=1aHEw8lXkD1aSBMWpC8ku4c2eP_QfZ3oO">
       {% block links %}
       {% endblock %}
         <title>
@@ -57,10 +58,10 @@
                 <a class="nav-link" href="{{ url_for('test.Test')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-graduation-cap"></i>&nbsp; For Students &nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-chalkboard-user"></i>&nbsp;For Teachers&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('test.for_teacher')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-chalkboard-user"></i>&nbsp;For Teachers&nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('comming_soon')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-calendar-days"></i>&nbsp;   Events&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('blog.blog_home')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-blog"></i>&nbsp;   Blogs&nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               
               <!--Remove login button when user logs in when -->

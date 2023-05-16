@@ -9,81 +9,29 @@
 {% block content %}
     <!-- heading -->
     <div class="container">
-        <h1 class="Page_title">Select Your Exam For Test</h1>
+        <h1 class="Page_title">How do you want to test your students</h1>
 
         <br> 
         <div class="list_item">
 
             <!-- image & exam name -->
-          <div class="item_details" >
+        <div class="item_details" >
 
             <div class="aligned">
-                <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/Random.png" alt="">
-                     
+                <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/994960.png" alt="">
+                    
                 <span class="exam_details">
-                    <h2>&nbsp;&nbsp;Random Practice Questions </h2>
-                    <h3 id="test_time"> Test Time: Mixed &nbsp;| &nbsp;Difficulty level: Mixed </h3>
+                    <h2>&nbsp;&nbsp;Random Test PDF(Offline) </h2>
+                    <h3 id="test_time">Test Time: Mixed &nbsp;| &nbsp;Difficulty level: Mixed </h3>
                 </span>
             </div>
-          </div>
-
-          <!-- select exam button -->
-          <div class="item_button">
-            <a href="{{ url_for('test.daily',Mobile=0)}}"><button class="tst_button" id="select">Test Yourself</button></a>
-            <a href="{{ url_for('test.daily',Mobile=1)}}"><button class="tst_button_mobile" id="select">Test Yourself</button></a>
-          </div> 
         </div>
-        {%if Tests%}
-        {%for i in Tests%}
-        <div class="list_item">
 
-            <!-- image & exam name -->
-          <div class="item_details" >
-
-            <div class="aligned">
-                <img class="list_img" src="{{i[2]}}" alt="">
-                     
-                <span class="exam_details">
-                    <h2 class="list_title">{{i[1]}}</h2><br>
-                    <h3 id="test_time">Test Topics: Mixed &nbsp;| &nbsp;Difficulty level: Mixed</h3>
-                </span>
-            </div>
-          </div>
-
-          <!-- select exam button -->
-
-          <div class="item_button">
-            <a href="{{ url_for('test.customTest',testId=i[0])}}"><button class="tst_button" id="select">Test Yourself </button></a>
-          </div> 
+        <!-- select exam button -->
+        <div class="item_button">
+            <a href="{{ url_for('test.generate_random_test')}}"><button class="tst_button" id="select">Generate PDF</button></a>
+        </div> 
         </div>
-        {%endfor%}
-        {%elif id%}
-            <h1 class="Page_title">Sorry We Dont have Any New Tests You Can Give at the moment please try our Offline Options</h1>
-            <div class="list_item">
-
-                <!-- image & exam name -->
-            <div class="item_details" >
-
-                <div class="aligned">
-                    <img class="list_img" src="https://raw.githubusercontent.com/Aptee/Aptee_Data/main/website_images/994960.png" alt="">
-                        
-                    <span class="exam_details">
-                        <h2>&nbsp;&nbsp;Custom Weakness Based Test (Offline) </h2>
-                        <h3 id="test_time">Test Time: Mixed &nbsp;| &nbsp;Difficulty level: Easy </h3>
-                    </span>
-                </div>
-            </div>
-
-            <!-- select exam button -->
-            <div class="item_button">
-                <a href="{{ url_for('test.Test')}}"><button class="tst_button" id="select">Generate PDF</button></a>
-            </div> 
-            </div>
-        {%else%}
-        <h1 class="Page_title">Login To See the Other Tests You Can Give</h1>
-        {%endif%}
-
-        
           
       </div>
 

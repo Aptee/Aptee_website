@@ -20,6 +20,7 @@ body{
     width: 100vw;
     height: 100vh;
 }
+
 /* sidebar question no etc */
 .sidebar{
     height: 100vh;
@@ -99,7 +100,7 @@ height: 3vw;
 width: 3vw;
 margin-left: 5px;
 margin-top: 10px;
-padding: 13px;
+padding: 10px;
 background-color: crimson;
 border-radius: 50%;
 display: inline-block;
