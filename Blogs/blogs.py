@@ -10,8 +10,8 @@ gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 @blog.route('/notif/<msg>&<alert>',methods=['GET','POST'])
 @blog.route('/',methods=['GET','POST'])
 def blog_home(msg="",alert=0):
+    form = SignupForm(flask.request.form)
     if 'id' in flask.session:
-        form = SignupForm(flask.request.form)
         sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
         wks=sh.worksheet("Blogs")
 
@@ -26,11 +26,11 @@ def blog_home(msg="",alert=0):
         return flask.render_template('Blog_homepage.html',form=form,Blog_list=row[0])
 @blog.route('/Post/<postid>')
 def blog_post(postid=""):
+    form = SignupForm(flask.request.form)
     if 'id' in flask.session:
         if len(postid)==0:
             return flask.redirect(flask.url_for("blog.blog_home",msg="Sorry We cannot Display that Blog",alert=0))
         else:
-            form = SignupForm(flask.request.form)
             sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1hSXNatvksQJBg-O0deeBMZyGQt08_iX41bX0LsQ2IBc/edit?usp=sharing')
             wks=sh.worksheet("Blogs")
             #print(postid)
