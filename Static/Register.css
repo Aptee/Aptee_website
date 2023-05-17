@@ -3,102 +3,79 @@
 .register{
   background-color: rgb(173, 240, 240);
 }
-/* image */
-.Register_img{
-  width: 900px;
-  height: 700px;
-  }
-
-  /* form heading */
-h1, p {
-  text-align: center;
-  }
-
-/* form styling */
-.container{
-  display: flex;
-  flex-direction: column;
+#regsign{
+    margin: auto;
+    text-align: center;
+    color: crimson;
 }
-.item{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
+.form-label{
+  padding-right: 15px;
+  font-size: 25px;
+  color: crimson;
+  font-weight: bold;
 }
-
-/* form area */
+#name{
+  padding-top: 30px;
+}
+#Register_email{
+  width: 300px !important;
+  height: 40px !important;
+  border: 1px solid black !important;
+  padding: 0px 0px 0px 0px !important;
+}
+#Register_password{
+  width: 300px !important;
+  height: 40px !important;
+  border: 1px solid black !important;
+  padding: 0px 0px 0px 0px !important;
+} 
+input{
+  width: 300px;
+  height: 40px;
+  border: 1px solid black;
+}
 .form-box {
-max-width: 750px;
+max-width: 700px;
 margin: auto;
 padding: 50px;
 background: #ffffff;
 border: 10px solid crimson;
 }
-.form-box p{
-  color: crimson;
-  font-size: 20px;
+
+h1, p {
+text-align: center;
 }
 
-/* form input name */
-.label{
-  width: 35%;
-  padding-top: 3vh;
+input, textarea {
+width: 100%;
 }
-.form-label{
-  font-size: 25px;
-  color: crimson;
-  font-weight: bold;
+.Register_img{
+width: 900px;
+height: 700px;
 }
-
-/* email & password input box */
- #Register_email{
-  width: 55%;
-  height: 10%;
-  padding-left: 2% !important;
-  padding-top: 0% !important;
-  padding-bottom: 0% !important;
-  margin-top: 15px;
-  border: 1px solid black;
-}  
-#login{
-  display: none;
-}
-
-/* form input box */
-#Register_name, #Register_course, #Register_DOB, #Register_target, #Register_gender, #Register_age, #Register_clg_location, #Register_college,#Register_email,#Register_password{
-  width: 400px;
+#Register_course{
+  width: 300px;
   height: 40px;
   border: 1px solid black;
-  border-radius: 4px;
-  padding-left: 10px;
-  margin-top: 15px;
 }
-/* terms & condition */
-.terms{
-  padding: 20px;
+#Register_DOB{
+  width: 300px;
+  height: 40px;
+  border: 1px solid black;
+}  
+#Register_gender{
+  width: 300px;
+  height: 40px;
+  border: 1px solid black;
 }
-
-/* submit button */
-.btn{
-  width: 400px;
-  background-color: crimson;
-  text-align: center;
-  margin: auto;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 20px;
-  /* margin-top: -40px; */
+#Register_target{
+width: 300px;
+  height: 40px;
+  border: 1px solid black;
 }
-.btn:hover{
-  background-color: white;
-  color: crimson;
-  border: 3px solid crimson;
+#login{
+display: none;
 }
-
-
 @media all and (max-width: 700px) {
 
 .Register_img{
@@ -124,13 +101,17 @@ border: 10px solid crimson;
   height: 40px;
   border: 1px solid black;
 }
-
+#Register_email{
+  width: 150px !important;
+  height: 40px !important;
+  border: 1px solid black !important;
+  padding: 0px 0px 0px 0px !important;
+}
 #Register_password{
   width: 150px !important;
   height: 40px !important;
   border: 1px solid black !important;
   padding: 0px 0px 0px 0px !important;
-  border-radius: 0px;
 } 
 .row{
   width: 100vw;
@@ -143,11 +124,16 @@ width: 100vw;
 }
 }
 @media all and (max-width: 350px){
-
+  #Register_email{
+  width: 125px !important;
+  height: 40px !important;
+  border: 1px solid black !important;
+  padding: 0px 0px 0px 0px !important;
+}
 #Register_password{
   width: 120px !important;
   height: 40px !important;
   border: 1px solid black !important;
   padding: 0px 0px 0px 0px !important;
 }
-} 
+}

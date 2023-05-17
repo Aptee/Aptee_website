@@ -4,7 +4,7 @@
   APTEE OFFICIAL
 {% endblock %}
 {% block links %}
-  <link href="https://drive.google.com/uc?export=veiw&id=1FPBpe51m2J1tupUayoo83jbipC_PGuv1" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
 {% endblock %}
 {% block content %}
 
@@ -115,8 +115,8 @@
           <img src="https://drive.google.com/uc?export=veiw&id=1UYZNwqTfyISnCgHP8Qz0A0zZT_kCV6Qd" alt="Nature" class="center">
         </div>
 
-        <div class="col-md-6">
-          <p style="text-align: justify; color: yellow; font-size: 30px;"  class="p-5" >
+        <div class="col-md-6" >
+          <p id ="mission_texts" style="text-align: justify; color: yellow;"  class="p-5" >
             Our mission is to deliver top of the line Aptitude practicing platform that affordable, flexible and
             available to people across the globe. With Aptee,
             anybody who is focused towards their future should be easily able to so at their convenience.
@@ -244,10 +244,7 @@
     }
 
     /* mission */
-    .center{
-      width: 600px;
-      height: 400px;
-    }
+    
     .p-5{
       padding: 20px;
       font-family: 'Rubik Distressed', cursive;
