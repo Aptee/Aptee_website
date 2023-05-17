@@ -38,11 +38,13 @@
       <div class="content">  
     <div class="start_btn">
         <div class="info-title"><h1>Some Rules of this Quiz</h1></div>
+        <h4>There is only one Question in this Quiz if you want to give the full length test please select other Available Quizes or Login to See your options.</h4>
+        <br>
             <div class="info">1. You can take however long you want to solve the question but  <span>{{Question[15]}} Seconds</span> should be enough to solve it.</div>
             <div class="info">2. Once you submit your answer, it can't be undone.</div>
             <div class="info">3. You can use pen and paper to do your rough work.</div>
-            <div class="info">4. Please do not change tabs while you are playing.</div>
-            <div class="info">5. You'll get coinss on the basis of your correct answers.</div>
+            <div class="info">4. Please do not change tabs while you are attempting.</div>
+            <div class="info">5. You'll get coins on the basis of your correct answers.</div>
       
         <button id="start" onclick='startButton()'>Start Quiz</button></div>
 
@@ -58,9 +60,9 @@
        
         <div class="info-list">
             <div class="infoquestion"> 	
-               Question No: <br><br> {{Question[7]}}</div>
+               Question: <br><br> {{Question[7]}}</div>
             
-                <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile,Token=Token)}}" method="post" class="form" >
+                <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile,Token=Token)}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
                    <input type="radio" id="op1" name="mcq" value="A">
                     <label for="op1">&nbsp&nbsp{{Question[8]}}</label><br>
                    <input type="radio" id="op2" name="mcq" value="B">
@@ -73,7 +75,7 @@
                     <br>  
                   <input id = "feild_txt" type="text" name = "Time_sheet" value="" hidden>
                      <div class="buttons">
-                        <button id="next" onclick='stopButton()'>Next Question</button>
+                        <button id="next" name ="submit_button" onclick='stopButton()'>Submit</button>
                     </div>
                    
                   </form>

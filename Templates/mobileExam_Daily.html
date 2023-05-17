@@ -23,6 +23,7 @@
         <div class="exam">
             <div class="start_btn">
                 <div class="info-title"><h1>Some Rules of this Quiz</h1></div>
+                <div class="info"><strong>There is only one Question in this Quiz if you want to give the full length test please select other Available Quizes or Login to See your options.</strong></div>
                     <div class="info">1. You can take however long you want to solve the question but  <span>{{Question[15]}} Seconds</span> should be enough to solve it.</div>
                     <div class="info">2. Once you submit your answer, it can't be undone.</div>
                     <div class="info">3. You can use pen and paper to do your rough work.</div>
@@ -35,12 +36,12 @@
 
             <h3>Multiple Choice Question (Choose one from the four options)</h3>
             <div class="open_close">
-                <p>Question 4</p>
+                <p>Question</p>
             </div>
             <div class="timer">
                 <div class="timeClock"><i class="fa-solid fa-clock"></i>&nbsp;&nbsp;<span id="timeClock"> {{timer|int/60|int}}</span></div> 
             </div>
-            <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile)}}" method="post" class="form" >
+            <form action="{{ url_for('test.daily',qid=qid,Mobile=Mobile)}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;" >
             <div class="QuestionAnswer">
                 <p>{{Question[7]}}</p>
                 <form action="" class="form" >
@@ -57,7 +58,7 @@
                   
                      <div class="btnSubmission">
                        <button type="button" class="delete"  onclick="clearForm()"><i class="fa-solid fa-trash"></i>Clear</button>
-                       <button type="submit" id= "submit_btn" class="next" onclick="stopButton()">Next Question<i class="fa-solid fa-arrow-right"></i></button>
+                       <button type="submit" id= "submit_btn"  name="submit_button" class="next" onclick="stopButton()">Submit<i class="fa-solid fa-arrow-right"></i></button>
                      </div>
                     
                    </form>

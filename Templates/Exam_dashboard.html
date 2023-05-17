@@ -89,7 +89,7 @@
             <div class="infoquestion"> 	
                Question {{status|length}}: <br><br>{{Row[7]}}</div>
             
-                <form action="{{ url_for('test.exam_submit')}}" method="post" class="form" >
+                <form action="{{ url_for('test.exam_submit')}}"  method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
                    <input type="radio" id="op1" name="mcq" value="A">
                    <label id="ans1" for="op1">&nbsp;&nbsp;{{Row[8]}}</label><br>
                    <input type="radio" id="op2" name="mcq" value="B">
@@ -105,7 +105,7 @@
                    
                     <br>  
                     <div class="buttons">
-                      <button id="submit_btn" type="submit" class="btn btn-success next" onclick="next_q()">Next Question</button>
+                      <button id="submit_btn" name = "submit_button" type="submit" class="btn btn-success next" onclick="next_q()">Next Question</button>
                     </div>
                    
                   </form>
@@ -141,6 +141,7 @@
         var endTime = Date.now();
         var difference = endTime - startTime - 500;
         document.getElementById("feild_time").value = String(difference);
+        // document.getElementById("submit_btn").disabled = true;
       }
       function clearForm(){
         document.getElementById("op1").checked = false;

@@ -25,7 +25,7 @@
       integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-      <link href="https://drive.google.com/uc?export=veiw&id=1Pw_ZVRjnTFUCrI-RFUAaa4oMF3xJDCbL" rel="stylesheet">
+      <link rel="stylesheet" href="{{ url_for('static',filename='base.css') }}">
       <link rel="icon" type="image/x-icon" href="https://drive.google.com/uc?export=veiw&id=1aHEw8lXkD1aSBMWpC8ku4c2eP_QfZ3oO">
       {% block links %}
       {% endblock %}
@@ -52,7 +52,7 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link active" href="{{ url_for('home')}}" class="menu-btn" aria-current="page"><i class="fa-solid fa-house-user"></i>&nbsp;  Home &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                <a class="nav-link" href="{{ url_for('home')}}" class="menu-btn" aria-current="page"><i class="fa-solid fa-house-user"></i>&nbsp;  Home &nbsp;&nbsp;&nbsp;&nbsp;</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('test.Test')}}" class="menu-btn"><i class="fa-sharp fa-solid fa-graduation-cap"></i>&nbsp; For Students &nbsp;&nbsp;&nbsp;&nbsp;</a>
