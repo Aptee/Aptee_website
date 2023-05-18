@@ -181,7 +181,46 @@ left join clients.details cd on cd.clientid = a1.cl_id WHERE coupon_code='{0}';"
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Your Coupon has expired",alert=0))
     else:
         return flask.redirect(flask.url_for("profile.usr_profile",msg="Error In Completing Purchase",alert=0))
-@ecm.route('/order_status/<success>',methods=['GET','POST'])
-def confirm_purchase(success=1):
+@ecm.route('/order_status/return?link_id=<link_id>&success=<success>&<buf>',methods=['GET','POST'])
+def confirm_purchase(link_id="",success=1,buf=""):
     form = SignupForm(flask.request.form)
-    return flask.render_template('Orders_Status.html',form=form,id=flask.session['id'],success=success)
+    if 'id' in flask.session:
+        return flask.render_template('Orders_Status.html',form=form,id=flask.session['id'],link_id=link_id,success=success)
+    else:
+        return flask.render_template('Orders_Status.html',form=form,link_id=link_id,success=success)
+
+@ecm.route('/Buy_product/',methods=['GET','POST'])
+def buy_product():
+    form = SignupForm(flask.request.form)
+    if 'id' in flask.session and flask.request.form:
+        postgres_find_query="""with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c
+                                    WHERE c.clientid like '{0}'               
+                                    GROUP by c.clientid)
+                                    SELECT d.clientid,d.email_id,d.client_name,d.cl_password,d.dob::TIMESTAMP::DATE,d.target_exam,d.gender,d.college,d.college_location,d.client_course,d.semester,d.avatar,d.email_verified,co.coin from clients.details as d
+                                    LEFT JOIN coins co on d.clientid = co.clientid
+                                    WHERE d.clientid like '{0}'
+                                    LIMIT 1;""".format(flask.session['id'])
+        res,err=postgres.postgres_connect(postgres_find_query,commit=0)
+        # print(2)
+        if len(err)==0:
+            client=[list(e) for e in res]
+            client=client[0]
+            # print(3)
+        if len(client[-2])==0:
+            return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Verify Your Email Address to Purchase",alert=0))
+        
+        url = 'http://127.0.0.1:8000/api/cashfree_payments'
+        payload={
+                    "id":client[0],
+                    "email":client[1],
+                    "product_id":'PD_'+flask.request.form.get('product_id'),
+                    "coupon":flask.request.form.get('coupon_id'),
+                    "price":flask.request.form.get('price'),
+                    "como_id":'cb'+flask.request.form.get('como_id'),
+                    "name":client[2]
+        }
+        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+        # json.dumps(payload)
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+    else:
+        return flask.render_template('Product.html',form=form)

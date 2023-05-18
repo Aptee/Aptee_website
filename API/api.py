@@ -6,6 +6,8 @@ import postgres
 import random
 import time
 from datetime import datetime
+import requests
+
 api= flask.Blueprint('api', __name__,template_folder='../Templates',static_folder='../Static')
 gc = gspread.service_account_from_dict(keygenerator.get_db_auth())
 
@@ -102,7 +104,7 @@ def purchase_through_coins():
 
 @api.route('/purchase_through_coupons/',methods=['POST'])
 def purchase_through_coupons():
-    """Rqruires : Id,email,Price,Product_id,Coupon_id"""
+    """Reqruires : Id,email,Price,Product_id,Coupon_id"""
     if 'id' in flask.request.get_json():
         data=flask.request.get_json()
         otp=random.randint(100000,999999)
@@ -162,6 +164,43 @@ def generate_test():
         else: 
             return recommend,400
 
+@api.route('/cashfree_payments/',methods=['POST'])
+def make_payments():
+    url = "https://sandbox.cashfree.com/pg/links"
+    payload = {
+        "customer_details": {
+            "customer_name": "John Doe",
+            "customer_phone": "9999999999",
+            "customer_email": "john@cashfree.com"
+        },
+        "link_notify": {
+            "send_sms": True,
+            "send_email": True
+        },
+        "link_notes": {
+            "key_1": "value_1",
+            "key_2": "value_2"
+        },
+        "link_meta": {
+            "notify_url": "https://ee08e626ecd88c61c85f5c69c0418cb5.m.pipedream.net",
+            "upi_intent": False,
+            "return_url": 'http://127.0.0.1:8000/'+flask.url_for("ecm.confirm_purchase",link_id="od_126",success=1,buf="")+'{link_id}'
+        },
+        "link_amount": 1,
+        "link_currency": "INR",
+        "link_id": "od_1211we6",
+        "link_partial_payments": False,
+        "link_purpose": "Payment for Order 1",
+        "link_auto_reminders": True
+    }
+    headers = {
+        "accept": "application/json",
+        "x-client-id": "TEST3888898e8c0470de634ccdaac8988883",
+        "x-client-secret": "TESTa73c56f4266ac523ba2eeac16a5db970cfa877fb",
+        "x-api-version": "2022-09-01",
+        "content-type": "application/json"
+    }
 
-
-
+    response = requests.post(url, json=payload, headers=headers)
+    print(response.text)
+    return response.text

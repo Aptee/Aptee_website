@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+Aptee Shop
+{% endblock %}
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static',filename='product_page.css') }}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<section>
+    <div class="container">
+      <h1>
+        buy the course
+        <i class="fa-solid fa-hand-peace"></i>
+      </h1>
+      <p>
+        join over 2,300 numerically enhanced people who have already stepped up their numerical ability game!
+      </p>
+      <div class="info">
+        <div class="box one">
+          <h2>
+            <i class="fa-solid fa-star"></i>
+            {{}}
+          </h2>
+          <div class="text">
+            <p>Join the long list of people helped by Aptee!</p>
+            <p>
+              Aptee Products are designed to enhance your neumerical ability no purchase will go to waste.
+            </p>
+            <p>{{}}</p>
+            <p>{{}}</p>
+          </div>
+          <div class="price">
+            <h3><sup>₹</sup>{{}}<sub>INR</sub></h3>
+            <button>buy now</button>
+          </div>
+        </div>
+        <div class="box tow">
+            <img src="{{}}" class="card-img-top" style="aspect-ratio: 1 / 1">
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

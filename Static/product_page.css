@@ -1,0 +1,135 @@
+* {
+  box-sizing: border-box;
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  padding: 0 20px;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+i {
+    color: #FFC83D;
+}
+section {
+  display: flex;
+  padding: 100px 0;
+
+}
+section .container {
+    padding: 30px;
+    background-color: #51509b;
+    border-radius: 10px;
+}
+section h1 {
+  color: white;
+}
+section .container h1 + p {
+  color: white;
+  padding: 10px 0px 20px 0;
+  font-size: 15px;
+}
+section .container .info {
+    display: flex;
+    position: relative;
+}
+section .box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  
+}
+section .box h2 {
+    color: #4A5568;
+    position: relative;
+    z-index: 1;
+}
+
+section .box .text {
+    padding-bottom: 80px;
+}
+section .box .price {
+    position: relative;
+
+}
+section .one .price h3 {
+    position: absolute;
+    bottom: 35px;
+    left: 20px;
+    font-size: 40px;
+    color: #4A5568;
+
+}
+section .one .price button {
+    font-size: 20px;
+    position: absolute;
+    bottom: 35px;
+    right: 50px;
+    background-color: #E5AF40;
+    color: white;
+    padding: 10px;
+    outline: none;
+    border: navajowhite;
+    border-radius: 5px;
+}
+section .one .price p {
+    font-size: 15px;
+    border: none;
+}
+section .box .price p a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+section .box h2 {
+  padding: 10px;
+}
+section .box p {
+  padding: 10px;
+  border-bottom: 1px solid rgb(231, 215, 215);
+}
+section .one {
+    width: 50%;
+}
+section .tow {
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 48%;
+    transform: translatey(-50%);
+}
+section .tow .price h3 {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    font-size: 40px;
+    color: #4A5568;
+
+}
+section .tow .price button {
+    font-size: 20px;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    background-color: #E5AF40;
+    color: white;
+    padding: 10px;
+    outline: none;
+    border: navajowhite;
+    border-radius: 5px;
+}
