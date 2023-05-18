@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+<!-- page title-->
+{% block title %}
+  Confirm Order!
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="main-content">
+      <p class="text">{{product_name}}</p>
+    </div>
+{%if Price%}
+    <div class="centre-content">
+      <h1 class="price">{{Price}}<span>/-</span></h1>
+      {%if coins == '1'%}
+      <a href="{{ url_for('ecm.confirm_purchase',success=success)}}"><button type="button" class="pay-now-btn">Complete Purchase  <i class="fa-solid fa-arrow-right"></i></button></a>
+      {%else%}
+      <p class="course">
+         Buy With Coins
+      </p>
+
+        {%if product_id=='1'%}
+              <form action="{{ url_for('ecm.reat_questions',)}}" method="post" class="form" >
+                  <input id = "feild_txt" type="text" name = "od_token" value="{{link['od_token']}}" hidden>
+                  <button type="submit" class="pay-now-btn">Complete Purchase  <i class="fa-solid fa-arrow-right"></i></button>
+              </form>
+              {%elif product_id=='2'%}
+              <form action="{{ url_for('ecm.reat_quiz')}}" method="post" class="form" >
+                  <input id = "feild_txt" type="text" name = "od_token" value="{{link['od_token']}}" hidden>
+                  <button type="submit" class="pay-now-btn">Complete Purchase  <i class="fa-solid fa-arrow-right"></i></button>
+              </form>
+          {%endif%}
+        <p>We will Send you an email with the link to attempt the Question/Quiz.</p>
+        {%endif%}
+    </div>
+{%else%}
+<div class="centre-content">
+    Sorry We Have Encountered an Error. Please See if Your Email Id is Verified or Not
+</div>
+{%endif%}
+
+    
+  </div>
+{%endblock%}
+{% block style %}
+<style>
+    .container {
+ /* height: 700px;
+  width: 600px;*/
+  background-color: white;
+    left: 50%;
+  margin: auto;
+  margin-top: 0px;
+}
+  
+.main-content {
+  height: 335px;
+  background-color: crimson;
+  border-bottom-left-radius: 90px;
+  border-bottom-right-radius: 80px;
+  border-top: #1e6b30;
+}
+  
+.text {
+  text-align: center;
+  font-size: 300%;
+  text-decoration: aliceblue;
+  color: aliceblue;
+  font-family: cursive;
+}
+  
+.course {
+  color: black;
+  font-size: 25px;
+  font-weight: bolder;
+}
+  
+.centre-content {
+  height: 280px;
+  margin: -100px 20px 20px;
+  color: crimson;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 25px;
+  padding-top: 0.5px;
+  background-color: white;
+  border:4px solid crimson;
+}
+  
+.centre-content-h1 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-weight: normal;
+}
+  
+
+  
+.pay-now-btn {
+  cursor: pointer;
+  color: #fff;
+  height: 50px;
+  width: 290px;
+  border: none;
+  background-color: crimson;
+  position: relative;
+  font-size: 20px;
+  font-weight: bold;
+}
+.pay-now-btn:hover{
+    background-color: white;
+    color: crimson;
+    border:3px solid crimson;
+  }
+
+</style>
+{%endblock%}

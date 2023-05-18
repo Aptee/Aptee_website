@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: crimson;
+}
+
+::selection{
+    color: #fff;
+    background: #007bff;
+}
+
+.start_btn,
+.info_box,
+.quiz_box,
+.result_box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.info_box.activeInfo,
+.quiz_box.activeQuiz,
+.result_box.activeResult{
+    opacity: 1;
+    z-index: 5;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+.start_btn{
+    background-color: white;
+    width: 940px;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 1;
+    transition: all 0.3s ease;
+    padding: 20px;
+    font-size: 25px;
+    margin-left: 170px;
+}
+.info-title h1{
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: crimson;
+    padding-bottom: 20px;
+    padding-left: 130px;
+}
+.info-title h3{
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    color: crimson;
+    padding-bottom: 20px;
+}
+
+.start_btn button{
+    font-size: 25px;
+    font-weight: 500;
+    color:white;
+    padding: 10px 30px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background: crimson;
+    float: right;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.start_btn button:hover{
+    background-color: white;
+    border: 3px solid crimson;
+    color: crimson;
+}
+#exit{
+    font-size: 15px;
+    font-weight: 500;
+    color:white;
+     padding: 10px 30px; 
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background: crimson;
+    float: right;
+    cursor: pointer;
+    margin-top: 20px;
+}
+#next{
+    font-size: 15px;
+    font-weight: 500;
+    color:white;
+    width: 200px;
+     padding: 10px 30px; 
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background: crimson;
+    float: right;
+    cursor: pointer;
+    margin-top: 20px;
+}
+#next:hover{
+    background-color:white;
+    color: crimson;
+    border: 3px solid crimson;
+}
+#exit:hover{
+    background-color:white;
+    color: crimson;
+    border: 3px solid crimson;
+}
+
+.form{
+   padding: 20px;
+    /* font-size: 10px; */
+}
+
+input[type="radio"] {
+    -ms-transform: scale(1.5); 
+    -webkit-transform: scale(1.5); 
+    transform: scale(1.5);
+}
+#id1{
+    padding: 10px;
+}
+
+.info_box{
+    width: 940px;
+    height: 80%;
+    margin-left: 130px;
+    padding: 50px;
+    background: #fff;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+.box{
+    width: 740px;
+    background-color: #fff;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.start_btn .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 2px solid crimson;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-radius: 5px 5px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.info_box .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 2px solid crimson;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-radius: 5px 5px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+.info_box .info-list{
+    padding: 15px 30px;
+}
+
+.info_box .info-list .info{
+    margin: 5px 0;
+    font-size: 17px;
+}
+
+.infoquestion{
+    font-size: 20px;
+}
+
+
+/* user dashboard & sidebar */
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 350px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+  }
+  .sidebar img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-left: 20px;
+    float: auto;
+    padding: 20px;
+  }
+  
+  .sidebar a {
+    display: block;
+    font-size: 20px;
+    color: black;
+    padding: 16px;
+    text-decoration: none;
+  }
+   
+  .sidebar a.active {
+    background-color: crimson;
+    color: white;
+  }
+  
+  .sidebar a:hover:not(.active) {
+    background-color: crimson;
+    color: white;
+  }
+  
+  div.content {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 100%;
+    
+  }
+
+  /* mediaquery */
+  
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+  
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+
+    @media screen and (max-width: 400px) {
+        .start_btn{
+         width: 340px;
+         font-size: 15px;
+        }
+    }
+    @media screen and (max-width: 400px) {
+        .info_box{
+         width: 340px;
+         font-size: 15px;
+        }
+    }
+}

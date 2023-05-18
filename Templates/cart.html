@@ -1,0 +1,7 @@
+{{message}}
+{{product_name}}
+{{link}}
+<form action="{{ url_for('ecm.reat_questions',)}}" method="post" class="form" >
+    <input id = "feild_txt" type="text" name = "od_token" value="{{link['od_token']}}" hidden>
+    <button type="submit" id= "submit_btn">Send Question Link<i class="fa-solid fa-arrow-right"></i></button>
+</form>

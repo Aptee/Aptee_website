@@ -1,0 +1,264 @@
+
+.Holder {
+  /* position: absolute; */
+  height: max-content;
+  width: 100%;
+  display: flex;
+  font-size: 20px;
+  font-family: cursive;
+}
+.sidenav{
+  width: 25vw;
+  /* height: 100vh; */
+  background: crimson;
+  display: flex;
+  flex-direction: column;
+}
+.sidenav h2{
+  text-align: center;
+  font-size: 40px;
+  color: yellow;
+  height: 20px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sidenav h5{
+  text-align: center;
+  padding-top: 30px;
+  color: yellow;
+  font-weight: normal;
+  font-family: 'Times New Roman', Times, serif;
+}
+.sidenav p{
+padding-top: 22px;
+}
+
+.icon{
+  display: flex;
+  font-size: 25px;
+  font-family: 'Times New Roman', Times, serif;
+  color: white;
+  height: 50px;
+  padding: 10px;
+}
+.sidenav i{
+  padding: 30px;
+  font-size: 20px;
+  color: yellow;
+}
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  padding: 10px;
+  align-self: center;
+  background: rgba(255, 255, 255, 0.157) url('./img_avatar.png');
+  background-size:contain ;
+  background-position: center;
+  margin: 10px;
+  margin-top: 30px;
+}
+
+/* left sidebar */
+.main{
+  flex: 1;
+  width: 100vw;
+  /* height: 100vh; */
+  /* padding: 20px; */
+  
+}
+
+
+/* navbar */
+
+.dashboard_navbar ul {
+  list-style-type: none;
+  width: 100%;
+  margin-top: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: crimson;
+}
+
+.dashboard_navbar li {
+  float: left;
+  border-right:1px solid #bbb;
+  font-size: 25px;
+}
+
+.dashboard_navbar li:last-child {
+  border-right: none;
+}
+
+.dashboard_navbar li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px 36px;
+  text-decoration: none;
+}
+
+.dashboard_navbar li a:hover:not(.active) {
+  background-color: #ffffff5d;
+}
+
+.dashboard_navbar .active {
+  background-color: #ffffff5d;
+}
+.two_box{
+  display: flex;
+  margin-left: 30px;
+}
+.test_box{
+  margin-left: 40px;
+  width: 30vw;
+  /* max-width: 30vw; */
+  height: 45vh;
+  /* max-width: 40vh; */
+  border: 4px solid crimson;
+  padding: 10px;
+  font-family: calibri;
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+/* #recom{
+  margin-left: 160px;
+  margin-bottom: 100px;
+} */
+#Recommended{
+  margin-left: 60px;
+  margin-bottom: 100px;
+}
+.details{
+  margin-left: 2vw;
+}
+
+/* report */
+.details h2{
+  margin-left: 150px;
+  padding-top: 10px;
+  font-weight: bolder;
+  font-family: cursive;
+}
+.search-container {
+  margin-left: 1100px;
+  margin-top: -100px;
+}
+.search-container input{
+  height: 40px;
+  width: 300px;
+}
+.report_content{
+  margin-left: 200px;
+  margin-top: 100px;
+  width: 70%;
+  height: 300px;
+  border: 4px solid crimson;
+  margin-bottom: 100px;
+}
+#searchButton:hover{
+  background-color: white;
+  color: crimson;
+  border: 2px solid crimson;
+}
+.report_content img{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  padding: 20px;
+  margin: 50px;
+}
+#test_id{
+  margin-left: 300px;
+  padding: 20px;
+  margin-top: -220px;
+}
+#test_date{
+  margin-left: 300px;
+  padding: 20px;
+  margin-top: -20px;
+}
+#viewReport{
+  margin-left: 800px;
+  font-size: 20px;
+  color: white;
+  height: 40px;
+  background-color: crimson;
+  outline: none;
+  border: none;
+}
+#viewReport:hover{
+  background-color: white;
+  border: 2px solid crimson;
+  color: crimson;
+}
+
+/* coin history */
+.details table {
+  border-collapse: collapse;
+  width: 50%;
+  margin-left: 350px;
+  margin-top: 10px;
+  margin-bottom: 100px;
+}
+.details th{
+  background-color: crimson;
+  color: white;
+  text-align: center;
+  border: 2px solid green;
+  padding: 8px;
+  font-size: 20px;
+}
+
+.details td {
+  padding: 8px;
+  text-align: left;
+  border: 2px solid crimson;
+  text-align: center;
+}
+
+.details tr:hover {background-color: #D6EEEE;}
+
+/* profile */
+#submit_btn{
+  height: 40px;
+  text-align: center;
+  color: white;
+  background-color: crimson;
+  margin-left: 80px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+#submit_btn:hover{
+  background-color: white;
+  color: crimson;
+  border: 2px solid crimson;
+}
+
+/* report */
+
+.search-container {
+  float: right;
+  color: crimson;
+}
+.search-container input{
+    border: 2px solid crimson;
+}
+.search-container button {
+  float: right;
+  padding: 6px 10px;
+  margin-top: 2px;
+  margin-right: 16px;
+  background: crimson;
+  color: white;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+/* analysis */
+.main h1{
+  padding: 50px;
+  font-family: cursive;
+}

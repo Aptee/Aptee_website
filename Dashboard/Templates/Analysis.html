@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}
+Your Analysis
+{% endblock %}
+{% block content%}
+<link rel="stylesheet" href="{{ url_for('static',filename='Profile_style.css') }}">
+
+<div class="main">
+    <div class="dashboard_navbar">
+        <ul>
+            <li><a href="">Profile</a></li>
+            <li><a href="{{ url_for('profile.usr_report_menu')}}">Report</a></li>
+            <li><a class="active" href="{{ url_for('profile.usr_analysis')}}">Analysis</a></li>
+            <li><a href="{{ url_for('profile.usr_coin_history')}}">Coin History</a></li>
+            <li><a href="{{ url_for('usr_shop')}}">Shop</a></li>
+        </ul>
+    </div>
+<h1 style="text-align: center;font-family: cursive;">Total Attempted Questions: {{Total}}</h1>
+<div class="bargraph" id="barchart_material" style="width: 75vw; height: 500px;padding-top: 5vh; font-size: 11px;margin-left: 15vw;"></div>
+<div style="display: flex;width:74vw;padding-top: 15vh;margin-left: 15vw;">
+  <div id="donutchart" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin: auto;"></div>
+  <div id="donutchart1" style="width: 100vw; height: 400px; display: flex; flex-direction: column;margin:auto;"></div>
+</div>
+<div id="calendar_basic" style="width: 60vw; margin:auto;margin-left: 20vw;margin-top: 10vh;"></div>
+{%endblock%}
+{% block style %}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+      var Cal='{{Time1}}';
+      google.charts.load("current", {packages:["calendar"]});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+       var dataTable = new google.visualization.DataTable();
+       dataTable.addColumn({ type: 'date', id: 'Date' });
+       dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+       //dataTable.addRow([new Date(Cal.split(',')[i].split('/')), parseInt(Cal.split(',')[i+1])]);
+       for (var i = 0; i < Cal.split(',').length; i=i+2) {
+          dataTable.addRow([new Date(Cal.split(',')[i].split('/')), parseInt(Cal.split(',')[i+1])]);
+        }
+       var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+       var options = {
+         title: "Daily Attempt Question Attendance",
+         height: 290,
+       };
+
+       chart.draw(dataTable, options);
+      }
+  </script>
+  <script type="text/javascript">
+    var pie = '{{pie}}';
+    pie=pie.split(',');
+    var newArr = [];
+    while(pie.length) newArr.push(pie.splice(0,2));
+    for (var i = 1; i < newArr.length; i++) {
+      newArr[i][1]=parseInt(newArr[i][1])
+    }
+    console.log(newArr); 
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(newArr);
+
+      var options = {
+        title: 'Total Attempts',
+        pieHole: 0.4,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+      chart.draw(data, options);
+    }
+  </script>
+  <script type="text/javascript">
+    var pie1 = '{{pie2}}';
+    pie1=pie1.split(',');
+    var newArr2 = [];
+    while(pie1.length) newArr2.push(pie1.splice(0,2));
+    for (var i = 1; i < newArr2.length; i++) {
+      newArr2[i][1]=parseInt(newArr2[i][1])
+    }
+    console.log(newArr2); 
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(newArr2);
+
+      var options = {
+        title: 'Questions you have attempted broken down by Question Level',
+        pieHole: 0.4,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart1'));
+      chart.draw(data, options);
+    }
+  </script>
+
+<!-- bar graph chart -->
+  <script type="text/javascript">
+    var bar = '{{bar_chart}}';
+    bar=bar.split(',');
+    var newArr1 = [];
+    while(bar.length) newArr1.push(bar.splice(0,3));
+    for (var i = 1; i < newArr1.length; i++) {
+      newArr1[i][1]=parseInt(newArr1[i][1])
+      newArr1[i][2]=parseInt(newArr1[i][2])
+    }
+    console.log(newArr1)
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(newArr1);
+
+      var options = {
+        chart: {
+          title: 'Topic Analysis',
+          subtitle: 'Attempts for Each Topic',
+        },
+        bars: 'vertical' // Required for Material Bar Charts.
+      };
+
+      var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+  </script>
+{% endblock %}
