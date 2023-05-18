@@ -1,2 +1,2 @@
-./etc/secrets/det.txt
-./etc/secrets/postgres.txt
+etc/secrets/det.txt
+etc/secrets/postgres.txt
