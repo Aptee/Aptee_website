@@ -1,2 +1,0 @@
-# Aptee
- Edited Readme
