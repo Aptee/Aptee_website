@@ -1,6 +1,6 @@
 import psycopg2
 def postgres_auth():
-    f = open("etc/secrets/postgres.txt", "r")
+    f = open("/etc/secrets/postgres.txt", "r")
     a=f.read()
     return a.split(',')
 def postgres_connect(query,commit=0):
