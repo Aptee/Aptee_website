@@ -5,7 +5,7 @@ from Form_model import SignupForm
 import postgres
 import random
 import time
-from datetime import datetime
+from datetime import datetime,timedelta,timezone
 import requests
 
 api= flask.Blueprint('api', __name__,template_folder='../Templates',static_folder='../Static')
@@ -166,42 +166,53 @@ def generate_test():
 
 @api.route('/cashfree_payments/',methods=['POST'])
 def make_payments():
-    
-    url = "https://sandbox.cashfree.com/pg/links"
-    payload = {
-        "customer_details": {
-            "customer_name": "John Doe",
-            "customer_phone": "9999999999",
-            "customer_email": "john@cashfree.com"
-        },
-        "link_notify": {
-            "send_sms": True,
-            "send_email": True
-        },
-        "link_notes": {
-            "key_1": "value_1",
-            "key_2": "value_2"
-        },
-        "link_meta": {
-            "notify_url": "https://ee08e626ecd88c61c85f5c69c0418cb5.m.pipedream.net",
-            "upi_intent": False,
-            "return_url": 'http://127.0.0.1:8000/'+flask.url_for("ecm.confirm_purchase",link_id="od_126",success=1,buf="")+'{link_id}'
-        },
-        "link_amount": 1,
-        "link_currency": "INR",
-        "link_id": "od_1211we6",
-        "link_partial_payments": False,
-        "link_purpose": "Payment for Order 1",
-        "link_auto_reminders": True
-    }
-    headers = {
-        "accept": "application/json",
-        "x-client-id": "TEST3888898e8c0470de634ccdaac8988883",
-        "x-client-secret": "TESTa73c56f4266ac523ba2eeac16a5db970cfa877fb",
-        "x-api-version": "2022-09-01",
-        "content-type": "application/json"
-    }
+    if 'id' in flask.request.get_json():
+        auth=keygenerator.cashpay_auth()
+        data=flask.request.get_json()
+        #print(data)
+        od_token=str(data['id'])+'-CASHFREE-'+str(data['price'])+'-'+datetime.now().strftime("%d%m%Y%H%M%S")
+        postgres_insert_query="""INSERT INTO ecommerce.orders
+            (email,product_id,coupon_id,order_total,order_disc,final_price,order_ts,client_id,od_token,comodity_id,complition_otp)
+            VALUES ('{0}','{1}','{3}','{4}','{4}','0',CURRENT_TIMESTAMP,'{2}','{7}','{5}','{6}')
+            """.format(data['email'],data['product_id'],data['id'],data['coupon'],int(data['price']),"NONE",data['Phone'],od_token)
+        # a=postgres.postgres_connect(postgres_insert_query,commit=1)
+        print(postgres_insert_query)
+        #print((datetime.now(timezone.utc) + timedelta(minutes = 10)).isoformat())
+        url = "https://sandbox.cashfree.com/pg/links"
+        payload = {
+            "customer_details": {
+                "customer_name": data['name'],
+                "customer_phone": data['Phone'],
+                "customer_email": data['email']
+            },
+            "link_expiry_time":  (datetime.now(timezone.utc) + timedelta(minutes = 10)).isoformat(),
+            "link_notify": {
+                "send_sms": True,
+                "send_email": True
+            },
+            "link_notes": {
+                "key_1": "value_1",
+                "key_2": "value_2"
+            },
+            "link_meta": {
+                "upi_intent": False,
+                "return_url": 'http://127.0.0.1:8000/'+flask.url_for("ecm.confirm_purchase",link_id=od_token,success=1,buf="")+'{link_id}'
+            },
+            "link_amount": data['price'],
+            "link_currency": "INR",
+            "link_id": od_token,
+            "link_partial_payments": False,
+            "link_purpose": "Payment for "+data['product_name'],
+            "link_auto_reminders": True
+        }
+        headers = {
+            "accept": "application/json",
+            "x-client-id": auth[0],
+            "x-client-secret": auth[1],
+            "x-api-version": "2022-09-01",
+            "content-type": "application/json"
+        }
 
-    response = requests.post(url, json=payload, headers=headers)
-    print(response.text)
-    return response.text
+        response = requests.post(url, json=payload, headers=headers)
+        res=response.json()
+        return res

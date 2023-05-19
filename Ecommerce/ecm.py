@@ -216,16 +216,25 @@ def buy_product(item=0):
                     "product_id":'PD_'+flask.request.form.get('product_id'),
                     "coupon":flask.request.form.get('coupon_id'),
                     "price":flask.request.form.get('price'),
+                    "product_name":flask.request.form.get('product_name'),
+                    "Phone":flask.request.form.get('Phone'),
                     "name":client[2]
         }
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         # json.dumps(payload)
-        print(payload)
-        #r = requests.post(url, data=json.dumps(payload), headers=headers)
+        # print(payload)
+        r = requests.post(url, data=json.dumps(payload), headers=headers)
+        if r.status_code==200:
+            res=r.json()
+            print(res)
+            data=keygenerator.get_shop_products(item=item)
+            return flask.render_template('Product.html',form=form,coupon=flask.request.form.get('coupon_id'),phone=flask.request.form.get('Phone'),data=data,price=res['link_amount'],link=res['link_url'])
+        else:
+            return flask.redirect(flask.url_for("profile.usr_profile",msg="Error in Sending Email Link",alert=0))
     else:
         if item!=0:
             print(item)
             data=keygenerator.get_shop_products(item=item)
-            return flask.render_template('Product.html',form=form,data=data)
+            return flask.render_template('Product.html',form=form,data=data,item=item)
         else:
             return flask.redirect(flask.url_for("usr_shop"))
