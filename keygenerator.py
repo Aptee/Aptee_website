@@ -66,11 +66,16 @@ def get_rec_questions(Tid=[],rec=0):
     else:
         return {"msg":"Minimum 10 Questions Required"}
     return result
-def get_shop_products():
+def get_shop_products(item=0):
     line=urllib.request.urlopen('https://raw.githubusercontent.com/Aptee/Aptee_Data/main/Test_data/Products_with_img.csv').read()
     rec=[e.split(',') for e in str(line,'utf-8').split('\n')]
-    if len(rec)>1:
+    if len(rec)>1 and item!=0:
         result = rec[1:-1]
+        result=[x for x in rec if x[0]==str(item)][0]
+        return result
+    elif len(rec)>1 and item==0:
+        result = rec[1:-1]
+        return result
     else:
         return "error"
-    return result
+        #print(result) 

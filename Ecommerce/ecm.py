@@ -189,8 +189,9 @@ def confirm_purchase(link_id="",success=1,buf=""):
     else:
         return flask.render_template('Orders_Status.html',form=form,link_id=link_id,success=success)
 
+@ecm.route('/Buy_product/item_id=<item>',methods=['GET','POST'])
 @ecm.route('/Buy_product/',methods=['GET','POST'])
-def buy_product():
+def buy_product(item=0):
     form = SignupForm(flask.request.form)
     if 'id' in flask.session and flask.request.form:
         postgres_find_query="""with coins as (SELECT c.clientid, sum(c.coin_in::INTEGER)-sum(c.coin_out::INTEGER) as coin from clients.coin_history c
@@ -206,9 +207,8 @@ def buy_product():
             client=[list(e) for e in res]
             client=client[0]
             # print(3)
-        if len(client[-2])==0:
+        if len(client[-2])!=0:
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Verify Your Email Address to Purchase",alert=0))
-        
         url = 'http://127.0.0.1:8000/api/cashfree_payments'
         payload={
                     "id":client[0],
@@ -216,11 +216,16 @@ def buy_product():
                     "product_id":'PD_'+flask.request.form.get('product_id'),
                     "coupon":flask.request.form.get('coupon_id'),
                     "price":flask.request.form.get('price'),
-                    "como_id":'cb'+flask.request.form.get('como_id'),
                     "name":client[2]
         }
         headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
         # json.dumps(payload)
-        r = requests.post(url, data=json.dumps(payload), headers=headers)
+        print(payload)
+        #r = requests.post(url, data=json.dumps(payload), headers=headers)
     else:
-        return flask.render_template('Product.html',form=form)
+        if item!=0:
+            print(item)
+            data=keygenerator.get_shop_products(item=item)
+            return flask.render_template('Product.html',form=form,data=data)
+        else:
+            return flask.redirect(flask.url_for("usr_shop"))

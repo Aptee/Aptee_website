@@ -23,9 +23,7 @@
     width: 1170px;
   }
 }
-i {
-    color: #FFC83D;
-}
+
 section {
   display: flex;
   padding: 100px 0;
@@ -132,4 +130,8 @@ section .tow .price button {
     outline: none;
     border: navajowhite;
     border-radius: 5px;
+}
+.card-img-top{
+  height: 250px;
+  width: 250px;
 }

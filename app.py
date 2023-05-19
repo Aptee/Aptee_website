@@ -239,19 +239,22 @@ def api_test():
 @app.route('/Shop/',methods=['GET','POST'])
 def usr_shop():
     form = SignupForm(flask.request.form)
+    data=keygenerator.get_shop_products()
     if 'id' in flask.session:
-        data=keygenerator.get_shop_products()
         if data!="error":
             return flask.render_template('shop.html',data=data,form=form,id=flask.session['id'])
         return flask.redirect(flask.url_for("comming_soon"))
     else:
-        return flask.redirect(flask.url_for("home"))
+        return flask.render_template('shop.html',data=data,form=form)
 
 @app.route('/logout',methods=['GET','POST'])
 def logout():
         flask.session.pop('id',None)
         flask.session.pop('attempt',None)
         return flask.redirect(flask.url_for("home"))
+@app.route('/privacy_policy_and_T&C',methods=['GET','POST'])
+def policy():
+        return flask.render_template('Privacy_policy.html')
 
 if __name__ == '__main__':
     app.run(debug = True,port=8000)
