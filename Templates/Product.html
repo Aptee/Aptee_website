@@ -39,21 +39,20 @@ Aptee Shop
             {%else%}
             <h3><sup>₹</sup>&nbsp;{{data[4]}}&nbsp;<sub>INR</sub></h3>
             {%endif%}
-
-            <button>Buy Now</button>
-            <form action="{{ url_for('ecm.buy_product')}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
+            <form action="{{ url_for('ecm.buy_product',item=item)}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
               <input id = "feild_stack" type="text" name="product_id" value="{{data[0]}}" hidden>
               <input id = "feild_det" type="text" name="price" value="{{data[4]}}" hidden>
+              <input id = "feild_det" type="text" name="product_name" value="{{data[1]}}" hidden>
               <input id = "feild_det" type="text" name="coupon_id" placeholder="Enter Any Coupons You Have" value="{{Coupon}}">
-              <input id = "feild_det" type="text" name="phone" placeholder="Enter Your Phone Number" value="{{phone}}" required>
+              <input id = "feild_det" type="text" name="Phone" placeholder="Enter Your Phone Number" value="{{phone}}" required>
               {%if link%}
-                <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next" disabled>Place Order</button>
+                <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next" style="display: none;">Place Order</button>
               {%else%}
                 <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next">Place Order</button>  
               {%endif%}
             </form>
             {%if link%}
-              <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next" disabled>Pay ₹ {{price}}</button>
+              <a href="{{link}}"><button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next">Pay ₹ {{price}} Now</button></a>
             {%endif%}
           </div>
         </div>
