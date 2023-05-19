@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}
+Aptee Shop
+{% endblock %}
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static',filename='product_page.css') }}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<section>
+    <div class="container">
+      <h1>
+        buy the course
+        <i class="fa-solid fa-hand-peace"></i>
+      </h1>
+      <p>
+        join over 2,300 numerically enhanced people who have already stepped up their numerical ability game!
+      </p>
+      <div class="info">
+        <div class="box one">
+          <h2>
+            <i class="fa-solid fa-star"></i>
+            {{data[1]}}
+          </h2>
+          <div class="text">
+            <p>Join the long list of people helped by Aptee!</p>
+            <p>
+              Aptee Products are designed to enhance your neumerical ability no purchase will go to waste.
+            </p>
+            <p></p>
+            <p>Category: {{data[2]}}</p>
+          </div>
+          <div class="price">
+            {%if data[3] != '0' %}
+            <h3>{{data[3]}}<sub>Aptee Coins</sub></h3>
+            {%else%}
+            <h3><sup>₹</sup>&nbsp;{{data[4]}}&nbsp;<sub>INR</sub></h3>
+            {%endif%}
+
+            <button>Buy Now</button>
+            <form action="{{ url_for('ecm.buy_product')}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
+              <input id = "feild_stack" type="text" name="product_id" value="{{data[0]}}" hidden>
+              <input id = "feild_det" type="text" name="price" value="{{data[4]}}" hidden>
+              <input id = "feild_det" type="text" name="coupon_id" placeholder="Enter Any Coupons You Have" value="{{Coupon}}">
+              <input id = "feild_det" type="text" name="phone" placeholder="Enter Your Phone Number" value="{{phone}}" required>
+              {%if link%}
+                <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next" disabled>Place Order</button>
+              {%else%}
+                <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next">Place Order</button>  
+              {%endif%}
+            </form>
+            {%if link%}
+              <button id="submit_btn" name="submit_button" type="submit" class="btn btn-success next" disabled>Pay ₹ {{price}}</button>
+            {%endif%}
+          </div>
+        </div>
+        <div class="box tow">
+            <img src="{{data[5]}}" class="card-img-top" style="aspect-ratio: 1 / 1">
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -126,6 +126,7 @@ def account():
                                             VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)
                                             """.format(flask.session['id'],flask.session['attempt'].split(',')[0],10,0)
                                         a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                                
                                 return flask.render_template('index.html',form=form,alert_colour=0,message="Account Created Successfully!",id=id)
                         else:
                                 return flask.render_template('register.html',form=form,alert_colour=0,message="We had some problems setting you up!")
@@ -235,11 +236,25 @@ def api_test():
         except:
                 return "BAD REQUEST"
 
+@app.route('/Shop/',methods=['GET','POST'])
+def usr_shop():
+    form = SignupForm(flask.request.form)
+    data=keygenerator.get_shop_products()
+    if 'id' in flask.session:
+        if data!="error":
+            return flask.render_template('shop.html',data=data,form=form,id=flask.session['id'])
+        return flask.redirect(flask.url_for("comming_soon"))
+    else:
+        return flask.render_template('shop.html',data=data,form=form)
+
 @app.route('/logout',methods=['GET','POST'])
 def logout():
         flask.session.pop('id',None)
         flask.session.pop('attempt',None)
         return flask.redirect(flask.url_for("home"))
+@app.route('/privacy_policy_and_T&C',methods=['GET','POST'])
+def policy():
+        return flask.render_template('Privacy_policy.html')
 
 if __name__ == '__main__':
     app.run(debug = True,port=8000)

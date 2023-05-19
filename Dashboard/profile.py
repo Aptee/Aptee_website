@@ -172,18 +172,6 @@ def usr_coin_history(page=-10):
         return flask.render_template('coin_history.html',Data=data,form=form,id=flask.session['id'])
     else:
         return flask.redirect(flask.url_for("home"))
-    
-@profile.route('/Shop/',methods=['GET','POST'])
-def usr_shop():
-    form = SignupForm(flask.request.form)
-    if 'id' in flask.session:
-        data=keygenerator.get_shop_products()
-        if data!="error":
-            return flask.render_template('shop.html',data=data,form=form,id=flask.session['id'])
-        return flask.redirect(flask.url_for("comming_soon"))
-    else:
-        return flask.redirect(flask.url_for("home"))
-
 
 def calendar_chart(Attempts):
     TimeS=[a[7].strftime("%m/%d/%Y") for a in Attempts]
