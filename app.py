@@ -200,7 +200,7 @@ def resend_otp():
 def email_link():
         if 'id' in flask.request.get_json():
                 data=flask.request.get_json()
-                print(data['header'])
+                # print(data['header'])
                 msg = Message(
                         string.capwords(data['header']),
                         sender ='apteeproject@gmail.com',
