@@ -171,6 +171,7 @@ left join clients.details cd on cd.clientid = a1.cl_id WHERE coupon_code='{0}';"
                 headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
                 # json.dumps(payload)
                 r = requests.post(url, data=json.dumps(payload), headers=headers)
+                # print(r.status_code)
                 # return flask.render_template('Product_buy_page.html',form=form,id=flask.session['id'],message="Please Verify Email First")
                 return flask.render_template('Order_successful.html',form=form,id=flask.session['id'],product_id=details[1],Price='Rs. '+str(details[2]),product_name=str(20*int(details[2]))+' Aptee Coins',coins='1',success='1') 
 
@@ -181,13 +182,47 @@ left join clients.details cd on cd.clientid = a1.cl_id WHERE coupon_code='{0}';"
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Your Coupon has expired",alert=0))
     else:
         return flask.redirect(flask.url_for("profile.usr_profile",msg="Error In Completing Purchase",alert=0))
-@ecm.route('/order_status/return?link_id=<link_id>&success=<success>&<buf>',methods=['GET','POST'])
-def confirm_purchase(link_id="",success=1,buf=""):
+@ecm.route('/order_status/link_id=<link_id>',methods=['GET','POST'])
+def confirm_purchase(link_id=""):
     form = SignupForm(flask.request.form)
+    link_id=link_id.split('|')[0]
     if 'id' in flask.session:
-        return flask.render_template('Orders_Status.html',form=form,id=flask.session['id'],link_id=link_id,success=success)
+        url = """https://sandbox.cashfree.com/pg/links/{0}""".format(link_id)
+        headers = {
+            "accept": "application/json",
+            "x-client-id": "TEST3888898e8c0470de634ccdaac8988883",
+            "x-client-secret": "TESTa73c56f4266ac523ba2eeac16a5db970cfa877fb",
+            "x-api-version": "2022-09-01"
+        }
+        response = requests.get(url, headers=headers)
+        res=response.json()
+        print(res)
+        if 'link_status' in res:
+            if res['link_status']=='PAID':
+                postgres_insert_query = """INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
+                                            VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)""".format(flask.session['id'],res['link_id'],int(res['link_amount'])*20,0)
+                a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                postgres_update_query="""UPDATE ecommerce.orders
+                                            SET status = 'paid',provided='yes'
+                                            WHERE od_token = '{0}'""".format(link_id)
+                a=postgres.postgres_connect(postgres_update_query,commit=1)
+                url = 'https://aptee.onrender.com/send_email'
+                payload={
+                            "id":flask.session['id'],
+                            "header":res['customer_details']['customer_name']+ " HERE ARE YOUR COINS!",
+                            "emails":res['customer_details']['customer_email'],
+                            "email_template":'Purchase_confirmation.html',
+                            "param":res['customer_details']['customer_name']+'||'+"YOUR PRODUCT"
+                    }
+                headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+                # json.dumps(payload)
+                r = requests.post(url, data=json.dumps(payload), headers=headers)
+                return flask.render_template('Orders_Status.html',success='1',form=form,id=flask.session['id'],link_id=link_id)
+            else:
+                return flask.render_template('Orders_Status.html',success=0,form=form,id=flask.session['id'],link_id=link_id)
+        return flask.render_template('Orders_Status.html',form=form,id=flask.session['id'],link_id=link_id)
     else:
-        return flask.render_template('Orders_Status.html',form=form,link_id=link_id,success=success)
+        return flask.render_template('Orders_Status.html',form=form,link_id=link_id)
 
 @ecm.route('/Buy_product/item_id=<item>',methods=['GET','POST'])
 @ecm.route('/Buy_product/',methods=['GET','POST'])
@@ -209,7 +244,7 @@ def buy_product(item=0):
             # print(3)
         if len(client[-2])!=0:
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Verify Your Email Address to Purchase",alert=0))
-        url = 'http://127.0.0.1:8000/api/cashfree_payments'
+        url = 'https://aptee.onrender.com/api/cashfree_payments'
         payload={
                     "id":client[0],
                     "email":client[1],
@@ -226,15 +261,31 @@ def buy_product(item=0):
         r = requests.post(url, data=json.dumps(payload), headers=headers)
         if r.status_code==200:
             res=r.json()
-            print(res)
+            #print(res)
             data=keygenerator.get_shop_products(item=item)
-            return flask.render_template('Product.html',form=form,coupon=flask.request.form.get('coupon_id'),phone=flask.request.form.get('Phone'),data=data,price=res['link_amount'],link=res['link_url'])
+            url = 'https://aptee.onrender.com/send_email'
+            payload={
+                        "id":client[0],
+                        "header":client[2]+ " Confirm Your Payment!",
+                        "emails":client[1],
+                        "email_template":'Purchase_success.html',
+                        "param":client[2]+'||'+res['link_url']+'||'+'https://aptee.onrender.com/ecommerce/order_status/link_id='+res['link_id']
+                }
+            headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+            # json.dumps(payload)
+            print(payload)
+            r = requests.post(url, data=json.dumps(payload), headers=headers)
+            print(r.status_code)
+            if r.status_code==200:
+                return flask.render_template('Product.html',id=flask.session['id'],form=form,coupon=flask.request.form.get('coupon_id'),phone=flask.request.form.get('Phone'),data=data,price=res['link_amount'],link=res['link_url'])
+            else:
+                return flask.redirect(flask.url_for("profile.usr_profile",msg="Error in Completing Purchasing",alert=0))    
         else:
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Error in Sending Email Link",alert=0))
     else:
         if item!=0:
             print(item)
             data=keygenerator.get_shop_products(item=item)
-            return flask.render_template('Product.html',form=form,data=data,item=item)
+            return flask.render_template('Product.html',id=flask.session['id'],form=form,data=data,item=item)
         else:
             return flask.redirect(flask.url_for("usr_shop"))

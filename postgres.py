@@ -14,17 +14,19 @@ def postgres_connect(query,commit=0):
                             database=postgres[3])
             cursor = connection.cursor()
             cursor.execute(query)
+            #print(query)
             if commit==1:
                 connection.commit()
             else:
                 res=cursor.fetchall()
+                #print(res)
+            if connection:
+                        cursor.close()
+                        connection.close()
         except (Exception, psycopg2.Error) as error:
                 print(error)
                 err= str(error)
-        finally:
-                if connection:
-                        cursor.close()
-                        connection.close()
+                
         if commit ==1 and len(err)<1:
             return 1
         elif commit ==1 and len(err)>0:
