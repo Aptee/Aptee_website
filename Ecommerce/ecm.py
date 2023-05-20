@@ -187,11 +187,12 @@ def confirm_purchase(link_id=""):
     form = SignupForm(flask.request.form)
     link_id=link_id.split('|')[0]
     if 'id' in flask.session:
+        auth=keygenerator.cashpay_auth()
         url = """https://sandbox.cashfree.com/pg/links/{0}""".format(link_id)
         headers = {
             "accept": "application/json",
-            "x-client-id": "TEST3888898e8c0470de634ccdaac8988883",
-            "x-client-secret": "TESTa73c56f4266ac523ba2eeac16a5db970cfa877fb",
+            "x-client-id": auth[0],
+            "x-client-secret": auth[1],
             "x-api-version": "2022-09-01"
         }
         response = requests.get(url, headers=headers)
@@ -242,7 +243,11 @@ def buy_product(item=0):
             client=[list(e) for e in res]
             client=client[0]
             # print(3)
-        if len(client[-2])!=0:
+        try:
+            verify=len(client[-2])
+        except:
+            verify=0
+        if verify!=0:
             return flask.redirect(flask.url_for("profile.usr_profile",msg="Please Verify Your Email Address to Purchase",alert=0))
         url = 'https://aptee.onrender.com/api/cashfree_payments'
         payload={
@@ -275,7 +280,7 @@ def buy_product(item=0):
             # json.dumps(payload)
             print(payload)
             r = requests.post(url, data=json.dumps(payload), headers=headers)
-            print(r.status_code)
+            # print(r.status_code)
             if r.status_code==200:
                 return flask.render_template('Product.html',id=flask.session['id'],form=form,coupon=flask.request.form.get('coupon_id'),phone=flask.request.form.get('Phone'),data=data,price=res['link_amount'],link=res['link_url'])
             else:
