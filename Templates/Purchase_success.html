@@ -6,7 +6,11 @@
         <p>
             We are so happy that you've decided Purcase One of Our Products!
             <br>
+            {%if param|length >2%}
+            You can use this <a href="{{param[1]}}">link</a> and Complete the purchase. Alternatively you can use this <a href="{{param[2]}}">link</a> to view your order Summary    
+            {%else%}
             You can use this <a href="https://aptee.onrender.com{{param[1]}}">link</a> and Complete the purchase.
+            {%endif%}
             <br>
             Happy learning!
             <br>

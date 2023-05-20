@@ -172,11 +172,11 @@ def make_payments():
         #print(data)
         od_token=str(data['id'])+'-CASHFREE-'+str(data['price'])+'-'+datetime.now().strftime("%d%m%Y%H%M%S")
         postgres_insert_query="""INSERT INTO ecommerce.orders
-            (email,product_id,coupon_id,order_total,order_disc,final_price,order_ts,client_id,od_token,comodity_id,complition_otp)
-            VALUES ('{0}','{1}','{3}','{4}','{4}','0',CURRENT_TIMESTAMP,'{2}','{7}','{5}','{6}')
+            (email,product_id,coupon_id,order_total,order_disc,final_price,order_ts,client_id,od_token,comodity_id,complition_otp,status,provided)
+            VALUES ('{0}','{1}','{3}','{4}','{4}','0',CURRENT_TIMESTAMP,'{2}','{7}','{5}','{6}','processing','no')
             """.format(data['email'],data['product_id'],data['id'],data['coupon'],int(data['price']),"NONE",data['Phone'],od_token)
-        # a=postgres.postgres_connect(postgres_insert_query,commit=1)
-        print(postgres_insert_query)
+        a=postgres.postgres_connect(postgres_insert_query,commit=1)
+        # print(postgres_insert_query)
         #print((datetime.now(timezone.utc) + timedelta(minutes = 10)).isoformat())
         url = "https://sandbox.cashfree.com/pg/links"
         payload = {
@@ -195,8 +195,9 @@ def make_payments():
                 "key_2": "value_2"
             },
             "link_meta": {
+                "notify_url": "http://aptee.onrender.com/",
                 "upi_intent": False,
-                "return_url": 'http://127.0.0.1:8000/'+flask.url_for("ecm.confirm_purchase",link_id=od_token,success=1,buf="")+'{link_id}'
+                "return_url": "https://aptee.onrender.com/ecommerce/order_status/link_id="+od_token+'|{link_id}'
             },
             "link_amount": data['price'],
             "link_currency": "INR",
