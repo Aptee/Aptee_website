@@ -1,11 +1,11 @@
 from cryptography.fernet import Fernet
 import urllib.request
 def generatekey():
-    f = open("etc/secrets/det.txt", "r")
+    f = open("/etc/secrets/det.txt", "r")
     a=f.read()
     return a[2:]
 def cashpay_auth():
-    f = open("etc/secrets/cashfree.txt", "r")
+    f = open("/etc/secrets/cashfree.txt", "r")
     a=f.read()
     return a.split(',')
 def get_db_auth():
