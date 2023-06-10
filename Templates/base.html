@@ -101,7 +101,7 @@
                   <div class="modal-body">
                       <h3 class="title">Login Form</h3>
                       <p class="description">Login here Using Email & Password</p>
-                      <form class="form" action="{{ url_for('home')}}" method="post">
+                      <form class="form" action="{{ url_for('home')}}" method="post" onsubmit="submit_button.disabled = true; return true;">
                         {{form.csrf_token}}
                         <div class="form-group">
                             <span class="input-icon"><i class="fa fa-user"></i></span>
@@ -112,7 +112,7 @@
                             {{ form.password }}
                         </div>
                         {{form.logincheckbox(checked=True)}}
-                        <button class="btn">Login</button>
+                        <button class="btn" name="submit_button">Login</button>
                       </form>
                   </div>
               </div>

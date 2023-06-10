@@ -209,7 +209,7 @@
         </div>
         <div class="col-md-6 contact-content">
           <div class="text">Message me</div>
-          <form action="{{ url_for('contact_us')}}" method="POST">
+          <form action="{{ url_for('contact_us')}}" method="POST" onsubmit="submit_button.disabled = true; return true;">
             <div class="fields">
               <div class="field name">
                 <input type="text" name="name" placeholder="Name" required>
@@ -225,7 +225,7 @@
               <textarea cols="30" rows="10" name="body" placeholder="Message.." required></textarea>
             </div>
             <div class="button-area">
-              <button type="submit"  name="submit">Send message</button>
+              <button type="submit"  name="submit submit_button">Send message</button>
             </div>
           </form>
         </div>

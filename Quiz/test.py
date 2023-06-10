@@ -201,11 +201,12 @@ def exam_submit():
                                             """.format(row[0],flask.session['id'],correct,time,row[15],row[4],row[5],row[6],Status[-1],Questions[0])
                     a=postgres.postgres_connect(postgres_insert_query,commit=1)
                     if a:
-                        postgres_insert_query = """
-                                            INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
-                                            VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)
-                                            """.format(flask.session['id'],row[0],10,0)
-                        a=postgres.postgres_connect(postgres_insert_query,commit=1)
+                        if correct:
+                            postgres_insert_query = """
+                                                INSERT INTO clients.coin_history(clientid,comodityid,coin_in,coin_out,transaction_time)
+                                                VALUES ('{0}','{1}',{2},{3},CURRENT_TIMESTAMP)
+                                                """.format(flask.session['id'],row[0],10,0)
+                            a=postgres.postgres_connect(postgres_insert_query,commit=1)
                     else:
                         return flask.redirect(flask.url_for("test.Test",msg="That Test Isn't Available Please Try Again!",alert=0))
                     if len(Status)==16:

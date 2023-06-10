@@ -9,11 +9,11 @@
     <span class="circle circle-8"></span>
 </div>
   
-<form action="{{ url_for('test.exam_dashboard',qno=next_Q)}}" method="post" class="form" >
+<form action="{{ url_for('test.exam_dashboard',qno=next_Q)}}" method="post" class="form" onsubmit="submit_button.disabled = true; return true;">
     <input id = "feild_stack" type="text" name="Questions" value="{{Questions}}" hidden>
     <input id = "feild_status" type="text" name="Status" value="{{Status}}" hidden>
     <div class="buttons" onload="test()">
-        <button id="submit_btn" type="submit" class="btn btn-success next">Click here if you are not taken to the next question automatically</button>
+        <button id="submit_btn" type="submit" name="submit_button" class="btn btn-success next">Click here if you are not taken to the next question automatically</button>
     </div>
 </form>
 <script>
